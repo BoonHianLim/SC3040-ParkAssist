@@ -74,7 +74,8 @@ class _MapInterfaceState extends State<MapInterface> {
           GoogleMap(
             onMapCreated: onMapCreated,
             initialCameraPosition: currentLocation,
-            myLocationEnabled: isLocationAccessGranted,
+            myLocationEnabled:
+                false, //set to isLocationAccessGranted, is set to false for now cos its flooding debug console
             myLocationButtonEnabled: false,
           ),
           IconButton(
