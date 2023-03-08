@@ -1,4 +1,4 @@
-import 'package:apitest/entity/carpark.dart';
+import 'package:parkassist/entity/carpark.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:async';
 import '../control/cp_controller.dart';
