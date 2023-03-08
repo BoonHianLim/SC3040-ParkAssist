@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'cp_controller.dart';
+import '../control/cp_controller.dart';
 import 'package:flutter/material.dart';
 import 'mainpage.dart';
 

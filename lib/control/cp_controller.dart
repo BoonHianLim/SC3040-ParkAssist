@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'carpark.dart';
+import '../entity/carpark.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
