@@ -70,6 +70,7 @@ class _MapInterfaceState extends State<MapInterface> {
         ],
       ),
       body: Stack(
+        alignment: AlignmentDirectional.bottomStart,
         children: [
           GoogleMap(
             onMapCreated: onMapCreated,
@@ -77,22 +78,55 @@ class _MapInterfaceState extends State<MapInterface> {
             myLocationEnabled:
                 false, //set to isLocationAccessGranted, is set to false for now cos its flooding debug console
             myLocationButtonEnabled: false,
+            markers: markers,
           ),
-          IconButton(
-              //move to bottom left of screen and add circular border and fill
-              color: Colors.black,
-              onPressed: () async {
-                if (isLocationAccessGranted) {
-                  mapController!.animateCamera(
-                      CameraUpdate.newCameraPosition(currentLocation));
-                } else {
-                  await MapController.requestLocationAccess()
-                      .then((value) => checkLocationPermission());
-                }
-              },
-              icon: const Icon(Icons.pin_drop)),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+            child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    shape: const CircleBorder(), backgroundColor: Colors.black),
+                onPressed: () async {
+                  if (isLocationAccessGranted) {
+                    mapController!.animateCamera(
+                        CameraUpdate.newCameraPosition(currentLocation));
+                  } else {
+                    await MapController.requestLocationAccess()
+                        .then((value) => checkLocationPermission());
+                  }
+                },
+                child: const Icon(
+                  Icons.flag_circle_rounded,
+                  color: Color(0xFF00E640),
+                  size: 80,
+                )),
+          )
         ],
       ),
     );
   }
 }
+
+//for testing
+var markers = {
+  Marker(
+      markerId: const MarkerId("marker1"),
+      position: const LatLng(1.287953, 103.851784),
+      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen)),
+  Marker(
+      markerId: const MarkerId("marker2"),
+      position: const LatLng(1.294444, 103.846947),
+      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed)),
+  Marker(
+      markerId: const MarkerId("marker3"),
+      position: const LatLng(1.282375, 103.864273),
+      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueYellow),
+      infoWindow: InfoWindow(
+        title: "10 / 29 lots available",
+        snippet: "click for more info",
+        onTap: () {
+          print("tapped");
+        },
+      ))
+};
+
+//TODO make custom marker widget? dk how
