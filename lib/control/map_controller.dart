@@ -3,9 +3,43 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class MapController {
-  //check if location access is granted
-  static Future<bool> isLocationAccessGranted() {
-    return Permission.location.status.isGranted;
+  //static variables
+  static bool locationAccessGranted = false;
+  static CameraPosition currentCameraPosition = const CameraPosition(
+      target: LatLng(1.287953, 103.851784), zoom: 15, tilt: 0, bearing: 0);
+  static CameraPosition currentUserLocation = const CameraPosition(
+      target: LatLng(1.287953, 103.851784), zoom: 15, tilt: 0, bearing: 0);
+  //getter functions
+  static bool getLocationAccessGranted() {
+    return MapController.locationAccessGranted;
+  }
+
+  static CameraPosition getCurrentCameraPosition() {
+    return MapController.currentCameraPosition;
+  }
+
+  static CameraPosition getCurrentUserLocation() {
+    return MapController.currentUserLocation;
+  }
+
+  //setter functions
+  static setLocationAccessGranted(bool locationAccessGranted) {
+    MapController.locationAccessGranted = locationAccessGranted;
+  }
+
+  static setCurrentCameraPosition(CameraPosition newLocation) {
+    MapController.currentCameraPosition = newLocation;
+  }
+
+  static setCurrentUserLocation(CameraPosition userCurrentLocation) {
+    MapController.currentUserLocation = userCurrentLocation;
+  }
+
+  //update if location access is granted
+  static Future<void> updateLocationAccessPermission() async {
+    await Permission.location.status.isGranted.then((value) {
+      MapController.setLocationAccessGranted(value);
+    });
   }
 
   //requests location access
@@ -33,7 +67,20 @@ class MapController {
     }
   }
 
+  //get current user position using geolocator
   static Future<Position> getCurrentLocation() {
     return Geolocator.getCurrentPosition();
+  }
+
+  static Future<void> updateCurrentUserLocation() async {
+    if (MapController.getLocationAccessGranted()) {
+      await getCurrentLocation().then((value) {
+        MapController.setCurrentUserLocation(CameraPosition(
+            target: LatLng(value.latitude, value.longitude),
+            zoom: 15,
+            tilt: 0,
+            bearing: 0));
+      });
+    }
   }
 }
