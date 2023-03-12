@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:parkassist/boundary/mainpage.dart';
+//import 'package:parkassist/boundary/mainpage.dart';
 import 'package:parkassist/boundary/map_interface.dart';
 
 void main() {
