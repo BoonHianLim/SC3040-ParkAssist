@@ -2,7 +2,7 @@ import 'package:parkassist/entity/carParkList.dart';
 import 'package:parkassist/entity/favouritesEntity.dart';
 
 class FavouritesController {
-  List<CarPark> fetchFavouritesList() {
+  static Future<List<CarPark>?> fetchFavouritesList() {
     return FavouritesEntity.fetchFavouritesList();
   }
 

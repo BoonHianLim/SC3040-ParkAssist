@@ -31,7 +31,7 @@ class FavouritesEntity {
 
   // this function will run whenever the program needs the favourites list
   // fetch the full list of favourites list from favouritesTxt and store into List<CarPark>
-  static Future<List?> fetchFavouritesList() async {
+  static Future<List<CarPark>?> fetchFavouritesList() async {
     late String contents;
     // 1. read the contents of the file into a string
     try {
