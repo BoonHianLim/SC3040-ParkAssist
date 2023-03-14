@@ -1,8 +1,8 @@
-import 'package:apitest/control/pricing_controller.dart';
+import 'package:parkassist/control/pricing_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:apitest/control/carParkController.dart';
-import 'package:apitest/entity/carParkList.dart';
-import 'package:apitest/entity/pricing.dart';
+import 'package:parkassist/control/carParkController.dart';
+import 'package:parkassist/entity/carParkList.dart';
+import 'package:parkassist/entity/pricing.dart';
 
 //takes carParkID string of the carpark object as parameter
 class InfoInterface extends StatefulWidget {
