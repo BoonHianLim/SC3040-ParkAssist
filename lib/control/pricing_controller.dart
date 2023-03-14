@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:apitest/entity/pricing.dart';
-import 'package:apitest/entity/carParkList.dart';
+import 'package:parkassist/entity/pricing.dart';
+import 'package:parkassist/entity/carParkList.dart';
 
 //dummy calculatorcontroller for infoInterface's pricing text for now.
 //hdb fee hardcoded from website, others from data.gov.sg. only tested for hdb as ltamall api only got hdb
