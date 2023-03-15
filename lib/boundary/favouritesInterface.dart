@@ -24,7 +24,7 @@ class _FavouritesInterfaceState extends State<FavouritesInterface> {
   // _ private to this class
   // the public class is the Future class
   // which will use 'await' to convert into the standard class
-  List<CarPark> _favList = [carparkdummy, carparkdummy];
+  List<CarPark> _favList = [];
   @override
   void initState() {
     _setup();
