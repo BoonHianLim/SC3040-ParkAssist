@@ -1,3 +1,4 @@
+import 'package:parkassist/boundary/favouritesInterface.dart';
 import 'package:parkassist/control/pricing_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:parkassist/control/carParkController.dart';
@@ -34,8 +35,16 @@ class _InfoInterfaceState extends State<InfoInterface> {
                 title: Text('${carpark.data!.development}'),
                 backgroundColor: Colors.green,
                 //favorites button. please add navigation
-                actions: const [
-                  IconButton(onPressed: null, icon: Icon(Icons.star))
+                actions: [
+                  IconButton(
+                      icon: const Icon(Icons.star),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const FavouritesInterface()));
+                      })
                 ],
               ),
               body: Column(
