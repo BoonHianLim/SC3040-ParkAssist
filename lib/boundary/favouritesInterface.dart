@@ -59,7 +59,7 @@ class _FavouritesInterfaceState extends State<FavouritesInterface> {
               ),
               onPressed: () {
                 // change below line
-                print("Back to map interface");
+                Navigator.pop(context);
               },
             ),
             title: const Text('Favourites'),
