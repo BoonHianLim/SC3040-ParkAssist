@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:parkassist/boundary/infoInterface.dart';
 import 'package:parkassist/control/carParkController.dart';
 import 'package:parkassist/control/map_controller.dart';
 import 'package:parkassist/entity/carParkList.dart';
@@ -35,7 +36,7 @@ class _MapInterfaceState extends State<MapInterface> {
     CarParkController cpcontroller = CarParkController();
     cpcontroller.getAllCarparks().then((value) {
       for (var element in value) {
-        Marker marker = createMarker(element);
+        Marker marker = createMarker(element, context);
         markers.add(marker);
       }
       setState(() {
@@ -43,8 +44,7 @@ class _MapInterfaceState extends State<MapInterface> {
       });
     });
     //set camera position to userlocation
-    MapController.setCurrentCameraPosition(
-        MapController.getCurrentUserLocation());
+    MapController.setCurrentCameraPosition(MapController.getCurrentUserLocation());
     setState(() {
       status = 'ready';
       print("map ready");
@@ -127,14 +127,12 @@ class _MapInterfaceState extends State<MapInterface> {
               padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
               child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      shape: const CircleBorder(),
-                      backgroundColor: Colors.black),
+                      shape: const CircleBorder(), backgroundColor: Colors.black),
                   onPressed: () async {
                     if (MapController.getLocationAccessGranted()) {
                       await MapController.updateCurrentUserLocation();
                       mapController!.animateCamera(
-                          CameraUpdate.newCameraPosition(
-                              MapController.getCurrentUserLocation()));
+                          CameraUpdate.newCameraPosition(MapController.getCurrentUserLocation()));
                     } else {
                       await MapController.requestLocationAccess().then((value) {
                         MapController.updateLocationAccessPermission();
@@ -180,13 +178,11 @@ class _MapInterfaceState extends State<MapInterface> {
 //for now no custom marker widget, so its just a generic yellow/red/green pin
 //then when click will open infowindow showing available lots
 
-Marker createMarker(CarPark cp) {
+Marker createMarker(CarPark cp, BuildContext context) {
   final Map cpMap = cp.toJson();
   final String id = cpMap["CarParkID"];
-  final double latitude =
-      double.parse((cpMap["Location"] as String).split(" ")[0]);
-  final double longitude =
-      double.parse((cpMap["Location"] as String).split(" ")[1]);
+  final double latitude = double.parse((cpMap["Location"] as String).split(" ")[0]);
+  final double longitude = double.parse((cpMap["Location"] as String).split(" ")[1]);
 
   final LatLng latlng = LatLng(latitude, longitude);
   final int availableLots = cpMap["AvailableLots"];
@@ -206,6 +202,8 @@ Marker createMarker(CarPark cp) {
         snippet: "click for more info",
         onTap: () {
           print("tapped $id");
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => InfoInterface(carParkID: id)));
         },
       ));
 }
