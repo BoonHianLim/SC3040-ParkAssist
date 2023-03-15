@@ -54,6 +54,10 @@ class FavouritesEntity {
       CarPark target = await CarParkController().getCarpark(item);
       favouritesList.add(target);
     }
+    // the file ends with a trailing comma
+    // so the result of the above function will create one more empty carpark
+    // drop that carpark
+    favouritesList.removeLast();
 
     // 4. return favourites list
     return favouritesList;

@@ -40,9 +40,7 @@ class _FavouritesInterfaceState extends State<FavouritesInterface> {
     setState(() {
       // if something went wrong, favList will be null
       // and the initial empty list remains
-      if (favList != null) {
-        _favList = favList;
-      }
+      _favList = favList;
     });
   }
 
@@ -91,7 +89,7 @@ class _FavouritesInterfaceState extends State<FavouritesInterface> {
               itemBuilder: (BuildContext context, index) {
                 return ListTile(
                   // for now, print out the location of the carpark. can change later
-                  title: Text(_favList[index].location!),
+                  title: Text(_favList[index].development!),
                   onTap: () {
                     // change below line of code
                     print("Back to map centred");
