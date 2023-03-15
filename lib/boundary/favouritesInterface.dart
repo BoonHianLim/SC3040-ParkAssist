@@ -58,7 +58,6 @@ class _FavouritesInterfaceState extends State<FavouritesInterface> {
                 size: 24,
               ),
               onPressed: () {
-                // change below line
                 Navigator.pop(context);
               },
             ),
@@ -78,8 +77,7 @@ class _FavouritesInterfaceState extends State<FavouritesInterface> {
                 size: 24,
               ),
               onPressed: () {
-                // change below line
-                print("Back to map interface");
+                Navigator.pop(context);
               },
             ),
             title: const Text('Favourites'),

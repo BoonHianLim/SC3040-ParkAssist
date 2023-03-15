@@ -2,7 +2,7 @@ import 'package:parkassist/entity/carParkList.dart';
 import 'package:parkassist/entity/favouritesEntity.dart';
 
 class FavouritesController {
-  static Future<List<CarPark>?> fetchFavouritesList() {
+  static Future<List<CarPark>> fetchFavouritesList() {
     return FavouritesEntity.fetchFavouritesList();
   }
 
@@ -31,6 +31,11 @@ class FavouritesController {
     if (favList.contains(carpark)) {
       favList.remove(carpark);
     }
+
+    // update the text file
+    FavouritesEntity.updateFavouritesTxt(favList);
+
+    // return to calling program for continuous use
     return favList;
   }
 }

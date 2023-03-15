@@ -2,7 +2,9 @@ import 'package:parkassist/boundary/favouritesInterface.dart';
 import 'package:parkassist/control/pricing_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:parkassist/control/carParkController.dart';
+import 'package:parkassist/control/favouritesController.dart';
 import 'package:parkassist/entity/carParkList.dart';
+import 'package:parkassist/entity/favouritesEntity.dart';
 import 'package:parkassist/entity/pricing.dart';
 
 //takes carParkID string of the carpark object as parameter
@@ -25,6 +27,7 @@ class _InfoInterfaceState extends State<InfoInterface> {
   }
 
   Widget build(BuildContext context) {
+    Future<List<CarPark>> favList = FavouritesEntity.fetchFavouritesList();
     return FutureBuilder<CarPark>(
         future: carparkFuture,
         builder: (context, carpark) {
@@ -36,7 +39,14 @@ class _InfoInterfaceState extends State<InfoInterface> {
                 backgroundColor: Colors.green,
                 //favorites button. please add navigation
                 actions: [
-                  IconButton(icon: const Icon(Icons.star), onPressed: null)
+                  IconButton(
+                      icon: const Icon(Icons.star),
+                      onPressed: () {
+                        favList.then((value) {
+                          CarParkController.addToFavourites(
+                              value, carpark.data!);
+                        });
+                      })
                 ],
               ),
               body: Column(

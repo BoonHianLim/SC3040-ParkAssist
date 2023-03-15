@@ -109,7 +109,10 @@ class _MapInterfaceState extends State<MapInterface> {
             IconButton(
                 padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
                 onPressed: () {
-                  print("favourites pressed");
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const FavouritesInterface()));
                 },
                 icon: const Icon(
                   Icons.star,

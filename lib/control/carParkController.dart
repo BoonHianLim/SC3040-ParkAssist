@@ -1,5 +1,6 @@
 import 'dart:async';
 import '../entity/carParkList.dart';
+import '../control/favouritesController.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -62,5 +63,9 @@ class CarParkController {
       return carparkList;
     }
     return carparkList;
+  }
+
+  static List<CarPark> addToFavourites(List<CarPark> favList, CarPark carpark) {
+    return FavouritesController.addToFavourites(favList, carpark);
   }
 }
