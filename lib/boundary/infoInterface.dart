@@ -36,12 +36,15 @@ class _InfoInterfaceState extends State<InfoInterface> {
                 backgroundColor: Colors.green,
                 //favorites button. please add navigation
                 actions: [
-                  IconButton(icon: const Icon(Icons.star), 
-                  onPressed: (){
-                    Navigator.push(
-                      context, 
-                      MaterialPageRoute(builder: (context) => const FavouritesInterface())),
-                  })
+                  IconButton(
+                      icon: const Icon(Icons.star),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const FavouritesInterface()));
+                      })
                 ],
               ),
               body: Column(
