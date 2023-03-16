@@ -1,3 +1,4 @@
+import 'package:parkassist/boundary/calculator_interface.dart';
 import 'package:parkassist/boundary/favouritesInterface.dart';
 import 'package:parkassist/control/pricing_controller.dart';
 import 'package:flutter/material.dart';
@@ -203,8 +204,15 @@ class _InfoInterfaceState extends State<InfoInterface> {
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(8),
-                    child: const ElevatedButton(
-                        onPressed: null, child: Text('Parking Fee Calculator')),
+                    child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const CalculatorInterface()));
+                        },
+                        child: const Text('Parking Fee Calculator')),
                   ),
                 ],
               ),
