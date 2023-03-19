@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:parkassist/boundary/infoInterface.dart';
+import 'package:parkassist/boundary/searchInterface.dart';
 import 'package:parkassist/control/carParkController.dart';
 import 'package:parkassist/control/map_controller.dart';
 import 'package:parkassist/boundary/favouritesInterface.dart';
@@ -71,10 +72,23 @@ class _MapInterfaceState extends State<MapInterface> {
     if (status == 'waiting') {
       return Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+              padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const SearchInterface()));
+              },
+              icon: const Icon(
+                Icons.search,
+                size: 36,
+              )),
           title: const Text(
             "PARK ASSIST",
             style: TextStyle(fontWeight: FontWeight.w600, fontSize: 24),
           ),
+          centerTitle: true,
           elevation: 0,
           backgroundColor: const Color(0xFF00E640),
           foregroundColor: Colors.black,
@@ -98,10 +112,23 @@ class _MapInterfaceState extends State<MapInterface> {
     } else {
       return Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+              padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const SearchInterface()));
+              },
+              icon: const Icon(
+                Icons.search,
+                size: 36,
+              )),
           title: const Text(
             "PARK ASSIST",
             style: TextStyle(fontWeight: FontWeight.w600, fontSize: 24),
           ),
+          centerTitle: true,
           elevation: 0,
           backgroundColor: const Color(0xFF00E640),
           foregroundColor: Colors.black,

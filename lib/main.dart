@@ -1,13 +1,8 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:parkassist/boundary/infoInterface.dart';
 import 'package:parkassist/boundary/map_interface.dart';
-import 'package:parkassist/boundary/favouritesInterface.dart';
-import 'package:parkassist/boundary/searchInterface.dart';
-import 'package:parkassist/entity/carParkList.dart';
 
 void main() {
- runApp(MyApp());
+  runApp(const MyApp());
 }
 
 /// Note from Wen Zhan (Made on 13th March 2023, 1.50am)
@@ -24,15 +19,13 @@ void main() {
 /// ChangeProvider after importing provider dependency because this class
 /// runs updateFavouritesList()
 
-
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: SearchInterface(),
+      home: MapInterface(),
     );
   }
 }
