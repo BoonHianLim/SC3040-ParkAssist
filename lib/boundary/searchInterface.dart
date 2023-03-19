@@ -66,9 +66,13 @@ class _SearchInterfaceState extends State<SearchInterface>{
 }
 
 
-class CustomSearchDelegate extends SearchDelegate{
-  final CarParkController carParkController = CarParkController();
-  List<String> developments = SearchController.getCarparkDevelopments(CarParkList as CarParkList);
+class CustomSearchDelegate extends SearchDelegate {
+  //final CarParkController carParkController = CarParkController();
+  Future<List<CarPark>> developments = CarParkController().getAllCarparks();
+ 
+  
+  //List<String> carparkdevelopment = SearchController.getCarparkDevelopments(developments);
+  //List cars = await CarParkController().getAllCarparks();
 
   @override
   List<Widget> buildActions(BuildContext context){
@@ -96,47 +100,57 @@ class CustomSearchDelegate extends SearchDelegate{
 
   @override
   Widget buildResults(BuildContext context){
-    List<String> matchQuery = [];
 
-    for (var word in developments){
-      if (word.toLowerCase().contains(query.toLowerCase())){
-        matchQuery.add(word);
-      }
-    }
-    return ListView.builder(
-      itemCount: matchQuery.length,
-      itemBuilder: (context,index){
-        var result = matchQuery[index];
-        return ListTile(
-          title: Text(result),
+        List<String> carparks = SearchController().getCarparkDevelopments();
+        List<String> matchQuery = [];
+        for (var word in carparks){
+          if (word.toLowerCase().contains(query.toLowerCase())){
+            matchQuery.add(word);
+        }
+        }
+        
+      
+        return ListView.builder(
+          itemCount: matchQuery.length,
+          itemBuilder: (context,index){
+            var result = matchQuery[index];
+            return ListTile(
+              title: Text(result),
+            );
+          },
         );
-      },
-    );
+      
+      
+    
   }
 
   @override
-  Widget buildSuggestions(BuildContext context) {
-    List<String> matchQuery = [];
-    for (var word in developments) {
-      if (word.toLowerCase().contains(query.toLowerCase())) {
-        matchQuery.add(word);
-      }
-    }
-    return ListView.builder(
-      itemCount: matchQuery.length,
-      itemBuilder: (context, index) {
-        var result = matchQuery[index];
-        return ListTile(
-          title: Text(result),
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const MapInterface()))
+  Widget buildSuggestions(BuildContext context){
+
+        List<String> carparks = SearchController().getCarparkDevelopments();
+        List<String> matchQuery = [];
+
+        for (var word in carparks){
+          if (word.toLowerCase().contains(query.toLowerCase())){
+            matchQuery.add(word);
+        }
+        }
+        
+      
+        return ListView.builder(
+          itemCount: matchQuery.length,
+          itemBuilder: (context,index){
+            var result = matchQuery[index];
+            return ListTile(
+              title: Text(result),
+            );
+          },
         );
-          //onpress
-      },
-    );
+      
+      
+    
   }
+  
 }
 
 

@@ -69,4 +69,8 @@ class CarPark {
     data['Agency'] = this.agency;
     return data;
   }
+
+  toLowerCase() {}
+
+  static map(Function(dynamic carPark) param0) {}
 }
