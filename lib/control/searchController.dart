@@ -39,6 +39,7 @@ class SearchController{
     }
     return results;
   }
+  
 }
    
 // Future<Developments> getDevelopments(CarPark carpark) async {

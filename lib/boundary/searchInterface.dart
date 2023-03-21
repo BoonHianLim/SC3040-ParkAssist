@@ -228,7 +228,6 @@ class CustomSearchDelegate extends SearchDelegate {
               );
          }
         List<CarPark>? data = snapshot.data;
-
           return ListView.builder(
               itemCount: data?.length,
               itemBuilder: (context, index) {
@@ -285,20 +284,9 @@ class CustomSearchDelegate extends SearchDelegate {
       child: Text('Search Carpark'),
     );
     }
+
 }
 
-
-        // List<String> matchQuery = [];
-        
-
-        //   for(int i = 0; i < data!.length ; i++){
-        //       for (var word in data){
-        //         if (word.toLowerCase().contains(query.toLowerCase())){
-        //           matchQuery.add(word as String);
-        //       }
-        //       }
-            
-        //   }
 
   //       List<String> carparks = SearchController().getCarparkDevelopments();
   //       List<String> matchQuery = [];
