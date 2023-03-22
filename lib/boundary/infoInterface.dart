@@ -25,6 +25,7 @@ class _InfoInterfaceState extends State<InfoInterface> {
   void initState() {
     //uses getCarparkByID() to get carpark object
     carpark = CarParkController.getCarparkByID(widget.carParkID);
+    print(carpark);
     fetchFavStatus(carpark, inFav);
     super.initState();
   }

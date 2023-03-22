@@ -32,23 +32,11 @@ class _MapInterfaceState extends State<MapInterface> {
     await MapController.requestLocationAccess();
     await MapController.updateLocationAccessPermission();
     await MapController.updateCurrentUserLocation();
-    await CarParkController.updateCarparkList();
-    //create markers based on carpark then add to markersList
-    Set<Marker> markers = {};
-    List<CarPark> carparkList = CarParkController.getCarparkList();
-    for (var carpark in carparkList) {
-      // ignore: use_build_context_synchronously
-      print(carpark.toString());
-      Marker marker = createMarker(carpark, context);
-      markers.add(marker);
-    }
-
-    setState(() {
-      markersList = markers;
-    });
+    await buildMarkers();
 
     //set camera position to userlocation
-    MapController.setCurrentCameraPosition(MapController.getCurrentUserLocation());
+    MapController.setCurrentCameraPosition(
+        MapController.getCurrentUserLocation());
     setState(() {
       status = 'ready';
       print("map ready");
@@ -59,6 +47,56 @@ class _MapInterfaceState extends State<MapInterface> {
     //   await MapController.updateCurrentUserLocation();
     //   print("updating current user location");
     // });
+  }
+
+  buildMarkers() async {
+    await CarParkController.updateCarparkList();
+    //create markers based on carpark then add to markersList
+    Set<Marker> markers = {};
+    List<CarPark> carparkList = CarParkController.getCarparkList();
+    for (var carpark in carparkList) {
+      // ignore: use_build_context_synchronously
+      Marker marker = createMarker(carpark, context);
+      markers.add(marker);
+    }
+    setState(() {
+      markersList = markers;
+    });
+  }
+
+  Marker createMarker(CarPark cp, BuildContext context) {
+    final Map cpMap = cp.toJson();
+    final String id = cpMap["CarParkID"];
+    final double latitude =
+        double.parse((cpMap["Location"] as String).split(" ")[0]);
+    final double longitude =
+        double.parse((cpMap["Location"] as String).split(" ")[1]);
+
+    final LatLng latlng = LatLng(latitude, longitude);
+    final int availableLots = cpMap["AvailableLots"];
+
+    final hue = availableLots == 0
+        ? BitmapDescriptor.hueRed
+        : availableLots < 10
+            ? BitmapDescriptor.hueYellow
+            : BitmapDescriptor.hueGreen;
+
+    return Marker(
+        markerId: MarkerId(id),
+        position: latlng,
+        icon: BitmapDescriptor.defaultMarkerWithHue(hue),
+        infoWindow: InfoWindow(
+          title: "$availableLots lots available",
+          snippet: "click for more info",
+          onTap: () async {
+            print("tapped $id");
+            await Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => InfoInterface(carParkID: id)));
+            await buildMarkers();
+          },
+        ));
   }
 
   //to define GoogleMapController
@@ -77,7 +115,9 @@ class _MapInterfaceState extends State<MapInterface> {
               padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
               onPressed: () {
                 Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => const SearchInterface()));
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const SearchInterface()));
               },
               icon: const Icon(
                 Icons.search,
@@ -95,8 +135,10 @@ class _MapInterfaceState extends State<MapInterface> {
             IconButton(
                 padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
                 onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const FavouritesInterface()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const FavouritesInterface()));
                 },
                 icon: const Icon(
                   Icons.stars,
@@ -111,9 +153,12 @@ class _MapInterfaceState extends State<MapInterface> {
         appBar: AppBar(
           leading: IconButton(
               padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-              onPressed: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => const SearchInterface()));
+              onPressed: () async {
+                await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const SearchInterface()));
+                await buildMarkers();
               },
               icon: const Icon(
                 Icons.search,
@@ -130,9 +175,12 @@ class _MapInterfaceState extends State<MapInterface> {
           actions: [
             IconButton(
                 padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const FavouritesInterface()));
+                onPressed: () async {
+                  await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const FavouritesInterface()));
+                  await buildMarkers();
                 },
                 icon: const Icon(
                   Icons.stars,
@@ -155,12 +203,14 @@ class _MapInterfaceState extends State<MapInterface> {
               padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
               child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      shape: const CircleBorder(), backgroundColor: Colors.black),
+                      shape: const CircleBorder(),
+                      backgroundColor: Colors.black),
                   onPressed: () async {
                     if (MapController.getLocationAccessGranted()) {
                       await MapController.updateCurrentUserLocation();
                       mapController!.animateCamera(
-                          CameraUpdate.newCameraPosition(MapController.getCurrentUserLocation()));
+                          CameraUpdate.newCameraPosition(
+                              MapController.getCurrentUserLocation()));
                     } else {
                       await MapController.requestLocationAccess().then((value) {
                         MapController.updateLocationAccessPermission();
@@ -178,62 +228,6 @@ class _MapInterfaceState extends State<MapInterface> {
       );
     }
   }
-}
-
-//for testing
-// var markers = {
-//   Marker(
-//       markerId: const MarkerId("marker1"),
-//       position: const LatLng(1.287953, 103.851784),
-//       icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen)),
-//   Marker(
-//       markerId: const MarkerId("marker2"),
-//       position: const LatLng(1.294444, 103.846947),
-//       icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed)),
-//   Marker(
-//       markerId: const MarkerId("marker3"),
-//       position: const LatLng(1.282375, 103.864273),
-//       icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueYellow),
-//       infoWindow: InfoWindow(
-//         title: "10 / 29 lots available",
-//         snippet: "click for more info",
-//         onTap: () {
-//           print("tapped");
-//         },
-//       ))
-// };
-
-//for now no custom marker widget, so its just a generic yellow/red/green pin
-//then when click will open infowindow showing available lots
-
-Marker createMarker(CarPark cp, BuildContext context) {
-  final Map cpMap = cp.toJson();
-  final String id = cpMap["CarParkID"];
-  final double latitude = double.parse((cpMap["Location"] as String).split(" ")[0]);
-  final double longitude = double.parse((cpMap["Location"] as String).split(" ")[1]);
-
-  final LatLng latlng = LatLng(latitude, longitude);
-  final int availableLots = cpMap["AvailableLots"];
-
-  final hue = availableLots == 0
-      ? BitmapDescriptor.hueRed
-      : availableLots < 10
-          ? BitmapDescriptor.hueYellow
-          : BitmapDescriptor.hueGreen;
-
-  return Marker(
-      markerId: MarkerId(id),
-      position: latlng,
-      icon: BitmapDescriptor.defaultMarkerWithHue(hue),
-      infoWindow: InfoWindow(
-        title: "$availableLots lots available",
-        snippet: "click for more info",
-        onTap: () {
-          print("tapped $id");
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => InfoInterface(carParkID: id)));
-        },
-      ));
 }
 
 //example of carpark toJson
