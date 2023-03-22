@@ -19,12 +19,25 @@ class InfoInterface extends StatefulWidget {
 
 class _InfoInterfaceState extends State<InfoInterface> {
   late Future<CarPark> carparkFuture;
+  late bool inFav;
 
   @override
   void initState() {
     //uses getCarpark() to get carpark object as a future
     carparkFuture = CarParkController().getCarpark(widget.carParkID);
+    fetchFavStatus(carparkFuture, inFav);
     super.initState();
+  }
+
+  void fetchFavStatus(Future<CarPark> carparkFuture, bool setFav) async {
+    CarPark carpark = await carparkFuture;
+    inFav = await FavouritesController.inFavourites(carpark);
+  }
+
+  void favStatusChange(bool setFav) {
+    setState(() {
+      inFav = setFav;
+    });
   }
 
   Widget build(BuildContext context) {
@@ -41,11 +54,20 @@ class _InfoInterfaceState extends State<InfoInterface> {
                 //favorites button. please add navigation
                 actions: [
                   IconButton(
-                      icon: const Icon(Icons.star),
+                      icon: inFav
+                          ? const Icon(Icons.star)
+                          : const Icon(Icons.star_border),
                       onPressed: () {
                         favList.then((value) {
-                          CarParkController.addToFavourites(
-                              value, carpark.data!);
+                          if (!inFav) {
+                            FavouritesController.addToFavourites(
+                                value, carpark.data!);
+                            favStatusChange(true);
+                          } else {
+                            FavouritesController.removeFromFavourites(
+                                value, carpark.data!);
+                            favStatusChange(false);
+                          }
                         });
                       })
                 ],

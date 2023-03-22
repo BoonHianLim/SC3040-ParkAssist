@@ -6,6 +6,11 @@ class FavouritesController {
     return FavouritesEntity.fetchFavouritesList();
   }
 
+  static Future<bool> inFavourites(CarPark carpark) async {
+    List<CarPark> favList = await fetchFavouritesList();
+    return favList.contains(carpark);
+  }
+
   static List<CarPark> addToFavourites(List<CarPark> favList, CarPark carpark) {
     // favList is NOT supposed to contain that carpark
     // and this function is only supposed to call itself when the carpark is NOT in favList
