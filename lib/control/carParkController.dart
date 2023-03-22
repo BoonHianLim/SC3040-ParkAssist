@@ -5,21 +5,24 @@ import 'package:http/http.dart';
 import 'dart:convert';
 
 class CarParkController {
-  static String Url = 'http://datamall2.mytransport.sg/ltaodataservice/CarParkAvailabilityv2';
-  static Map<String, String> apikey = {'AccountKey': 'AYM2LIAeS5GGP+VYNd7Cdw=='};
+  static String Url =
+      'http://datamall2.mytransport.sg/ltaodataservice/CarParkAvailabilityv2';
+  static Map<String, String> apikey = {
+    'AccountKey': 'AYM2LIAeS5GGP+VYNd7Cdw=='
+  };
   static List<CarPark> carparkList = [];
 
   static List<CarPark> getCarparkList() {
     return carparkList;
   }
 
+  // refresh carpark list
   static Future<void> updateCarparkList() async {
-    await getAllCarparks().then((value) {
-      carparkList = value;
-    });
+    carparkList = await getAllCarparks();
     print("carpark list updated");
   }
 
+  // get a carpark from the list by id
   static getCarparkByID(String id) {
     for (var i = 0; i < carparkList.length; i++) {
       if (carparkList[i].carParkID == id) {
@@ -28,7 +31,7 @@ class CarParkController {
     }
   }
 
-  //return list of all carpark objects as future, filter out non hdb carparks
+  //return list of all carpark objects as future, filter out non hdb and non type c scarparks
   static Future<List<CarPark>> getAllCarparks() async {
     List<CarPark> carparkList = [];
     var client = Client();
@@ -53,12 +56,13 @@ class CarParkController {
         }
       }
     } catch (e) {
-      print("e");
+      print(e.toString());
       return carparkList;
     }
     return carparkList;
   }
 
+  //will be commented out
   //return single carpark object based on carparkid as future
   Future<CarPark> getCarpark(carParkID) async {
     var carparkList;
@@ -90,7 +94,7 @@ class CarParkController {
     return CarPark();
   }
 
-  //return list of all carpark objects as future
+  //return list of all carpark objects as future, replaced by function above
   // Future<List<CarPark>> getAllCarparks() async {
   //   List<CarPark> carparkList = [];
   //   var client = http.Client();
@@ -119,6 +123,7 @@ class CarParkController {
   }
 }
 
+// for testing
 // Future<void> main() async {
 //   await CarParkController.updateCarparkList();
 //   CarParkController.getCarparkList().forEach((element) {
