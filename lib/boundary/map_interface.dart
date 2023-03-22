@@ -142,7 +142,7 @@ class _MapInterfaceState extends State<MapInterface> {
                           builder: (context) => const FavouritesInterface()));
                 },
                 icon: const Icon(
-                  Icons.star,
+                  Icons.stars,
                   size: 36,
                 ))
           ],
