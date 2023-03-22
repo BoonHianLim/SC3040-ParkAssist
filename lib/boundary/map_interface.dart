@@ -22,32 +22,33 @@ class _MapInterfaceState extends State<MapInterface> {
   Set<Marker> markersList = {};
   @override
   void initState() {
-    initMapController();
+    initMap();
     super.initState();
   }
 
   //initialise map controller by requesing location access then updating user location
-  initMapController() async {
+  initMap() async {
     //now clicking on go to user location has a ~2sec delay
     await MapController.requestLocationAccess();
     await MapController.updateLocationAccessPermission();
     await MapController.updateCurrentUserLocation();
-
+    await CarParkController.updateCarparkList();
     //create markers based on carpark then add to markersList
     Set<Marker> markers = {};
-    CarParkController cpcontroller = CarParkController();
-    cpcontroller.getAllCarparks().then((value) {
-      for (var element in value) {
-        Marker marker = createMarker(element, context);
-        markers.add(marker);
-      }
-      setState(() {
-        markersList = markers;
-      });
+    List<CarPark> carparkList = CarParkController.getCarparkList();
+    for (var carpark in carparkList) {
+      // ignore: use_build_context_synchronously
+      print(carpark.toString());
+      Marker marker = createMarker(carpark, context);
+      markers.add(marker);
+    }
+
+    setState(() {
+      markersList = markers;
     });
+
     //set camera position to userlocation
-    MapController.setCurrentCameraPosition(
-        MapController.getCurrentUserLocation());
+    MapController.setCurrentCameraPosition(MapController.getCurrentUserLocation());
     setState(() {
       status = 'ready';
       print("map ready");
@@ -76,9 +77,7 @@ class _MapInterfaceState extends State<MapInterface> {
               padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
               onPressed: () {
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const SearchInterface()));
+                    context, MaterialPageRoute(builder: (context) => const SearchInterface()));
               },
               icon: const Icon(
                 Icons.search,
@@ -96,10 +95,8 @@ class _MapInterfaceState extends State<MapInterface> {
             IconButton(
                 padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const FavouritesInterface()));
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => const FavouritesInterface()));
                 },
                 icon: const Icon(
                   Icons.stars,
@@ -116,9 +113,7 @@ class _MapInterfaceState extends State<MapInterface> {
               padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
               onPressed: () {
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const SearchInterface()));
+                    context, MaterialPageRoute(builder: (context) => const SearchInterface()));
               },
               icon: const Icon(
                 Icons.search,
@@ -136,10 +131,8 @@ class _MapInterfaceState extends State<MapInterface> {
             IconButton(
                 padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const FavouritesInterface()));
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => const FavouritesInterface()));
                 },
                 icon: const Icon(
                   Icons.stars,
@@ -162,14 +155,12 @@ class _MapInterfaceState extends State<MapInterface> {
               padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
               child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      shape: const CircleBorder(),
-                      backgroundColor: Colors.black),
+                      shape: const CircleBorder(), backgroundColor: Colors.black),
                   onPressed: () async {
                     if (MapController.getLocationAccessGranted()) {
                       await MapController.updateCurrentUserLocation();
                       mapController!.animateCamera(
-                          CameraUpdate.newCameraPosition(
-                              MapController.getCurrentUserLocation()));
+                          CameraUpdate.newCameraPosition(MapController.getCurrentUserLocation()));
                     } else {
                       await MapController.requestLocationAccess().then((value) {
                         MapController.updateLocationAccessPermission();
@@ -218,10 +209,8 @@ class _MapInterfaceState extends State<MapInterface> {
 Marker createMarker(CarPark cp, BuildContext context) {
   final Map cpMap = cp.toJson();
   final String id = cpMap["CarParkID"];
-  final double latitude =
-      double.parse((cpMap["Location"] as String).split(" ")[0]);
-  final double longitude =
-      double.parse((cpMap["Location"] as String).split(" ")[1]);
+  final double latitude = double.parse((cpMap["Location"] as String).split(" ")[0]);
+  final double longitude = double.parse((cpMap["Location"] as String).split(" ")[1]);
 
   final LatLng latlng = LatLng(latitude, longitude);
   final int availableLots = cpMap["AvailableLots"];
@@ -242,9 +231,7 @@ Marker createMarker(CarPark cp, BuildContext context) {
         onTap: () {
           print("tapped $id");
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => InfoInterface(carParkID: id)));
+              context, MaterialPageRoute(builder: (context) => InfoInterface(carParkID: id)));
         },
       ));
 }

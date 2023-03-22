@@ -4,7 +4,6 @@ import 'package:parkassist/entity/carParkList.dart';
 import 'package:parkassist/control/carParkController.dart';
 import 'dart:async';
 
-
 class SearchInterface extends StatefulWidget {
   const SearchInterface({super.key});
 
@@ -12,8 +11,7 @@ class SearchInterface extends StatefulWidget {
   State<SearchInterface> createState() => _SearchInterfaceState();
 }
 
-class _SearchInterfaceState extends State<SearchInterface>{
-
+class _SearchInterfaceState extends State<SearchInterface> {
   @override
   SearchController _devList = SearchController();
   @override
@@ -21,7 +19,6 @@ class _SearchInterfaceState extends State<SearchInterface>{
     SearchController();
     super.initState();
   }
-
 
   // @override
   // Widget build(BuildContext context) {
@@ -107,84 +104,74 @@ class _SearchInterfaceState extends State<SearchInterface>{
   //   );
   // }
 
-
   Widget build(BuildContext context) {
     return FutureBuilder<List<CarPark>>(
-      future: CarParkController().getAllCarparks(),
-      builder: (context, snapshot) {
-        return Scaffold(
-          appBar: AppBar(
-            title: const Text('Search'),
-            actions:[
-              IconButton(
-                icon: const Icon(Icons.search),
-                tooltip: 'Search',
-                onPressed: (){
-                   showSearch(
-                     context: context, 
-                     delegate: CustomSearchDelegate(),
-                   );
-                }
+        future: CarParkController.getAllCarparks(),
+        builder: (context, snapshot) {
+          return Scaffold(
+              appBar: AppBar(
+                title: const Text('Search'),
+                actions: [
+                  IconButton(
+                      icon: const Icon(Icons.search),
+                      tooltip: 'Search',
+                      onPressed: () {
+                        showSearch(
+                          context: context,
+                          delegate: CustomSearchDelegate(),
+                        );
+                      }),
+                ],
               ),
-            ],
-          ),
-      
-
-          body: ListView.builder(
-            itemCount: snapshot.data?.length,
-            itemBuilder: (BuildContext context, int index){
-              if (snapshot.hasData) {
-                return Container(
-                  height: 75,
-                  color: Colors.white,
-                  child: Center(
-                    child: Text(snapshot.data![index].development!),
-                  ),
-                );
-              }
-              else if (snapshot.hasError){
-                return Text(snapshot.error.toString());
-              }
-              return const CircularProgressIndicator();
-            }
-          )
-        );
-      }
-    );
+              body: ListView.builder(
+                  itemCount: snapshot.data?.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    if (snapshot.hasData) {
+                      return Container(
+                        height: 75,
+                        color: Colors.white,
+                        child: Center(
+                          child: Text(snapshot.data![index].development!),
+                        ),
+                      );
+                    } else if (snapshot.hasError) {
+                      return Text(snapshot.error.toString());
+                    }
+                    return const CircularProgressIndicator();
+                  }));
+        });
   }
 }
-
-
 
 class CustomSearchDelegate extends SearchDelegate {
   //final CarParkController carParkController = CarParkController();
   //Future<List<CarPark>> carparklist = CarParkController().getAllCarparks();
-  List<String> test = ['Dog','Batok','HIllVIew'];
+  List<String> test = ['Dog', 'Batok', 'HIllVIew'];
   //List<String> carparkdevelopment = SearchController.getCarparkDevelopments(developments);
   //List cars = await CarParkController().getAllCarparks();
 
   @override
-  List<Widget> buildActions(BuildContext context){
+  List<Widget> buildActions(BuildContext context) {
     return [
       IconButton(
         //icon: Icon(Icons.close)
         //clear query on press
-        onPressed: (){
-            query = '';
-          },
+        onPressed: () {
+          query = '';
+        },
         icon: const Icon(Icons.close),
       )
     ];
   }
-  
+
   @override
-  Widget buildLeading(BuildContext context){
-  //leave and close search bar
+  Widget buildLeading(BuildContext context) {
+    //leave and close search bar
     return IconButton(
       icon: const Icon(Icons.arrow_back),
-      onPressed: (){
+      onPressed: () {
         close(context, null);
-      },   
+      },
     );
   }
   //   @override
@@ -200,7 +187,7 @@ class CustomSearchDelegate extends SearchDelegate {
   //               if (word.toLowerCase().contains(query.toLowerCase())){
   //                 matchQuery.add(snapshot.data![i].development!);
   //             }
-            
+
   //         }
   //         }
   //           return ListView.builder(
@@ -217,17 +204,17 @@ class CustomSearchDelegate extends SearchDelegate {
   // }
 
   @override
-  Widget buildResults(BuildContext context){
+  Widget buildResults(BuildContext context) {
     return FutureBuilder<List<CarPark>>(
-      //future:SearchController().getDevelopments()
-      future: SearchController().getDevList(query: query),
-      builder: (context, snapshot) {
-         if (!snapshot.hasData) {
-           return const Center(
-             child: CircularProgressIndicator(),
-              );
-         }
-        List<CarPark>? data = snapshot.data;
+        //future:SearchController().getDevelopments()
+        future: SearchController().getDevList(query: query),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          List<CarPark>? data = snapshot.data;
           return ListView.builder(
               itemCount: data?.length,
               itemBuilder: (context, index) {
@@ -245,32 +232,27 @@ class CustomSearchDelegate extends SearchDelegate {
                           child: Text(
                             '${data?[index].carParkID}',
                             style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
+                                fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
                             overflow: TextOverflow.clip,
                           ),
                         ),
                       ),
                       const SizedBox(width: 20),
-                      Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '${data?[index].development}',
-                              style: const TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.w600),
-                            ),
-                            const SizedBox(height: 10),
-                            Text(
-                              '${data?[index].availableLots}',
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ])
+                      Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                        Text(
+                          '${data?[index].development}',
+                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          '${data?[index].availableLots}',
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ])
                     ],
                   ),
                 );
@@ -279,12 +261,11 @@ class CustomSearchDelegate extends SearchDelegate {
   }
 
   @override
-  Widget buildSuggestions(BuildContext context){
+  Widget buildSuggestions(BuildContext context) {
     return const Center(
       child: Text('Search Carpark'),
     );
-    }
-
+  }
 }
 
 

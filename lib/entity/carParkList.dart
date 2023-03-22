@@ -16,19 +16,13 @@ class CarParkList {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['odata.metadata'] = this.odataMetadata;
-    if (this.carparks != null) {
-      data['value'] = this.carparks!.map((v) => v.toJson()).toList();
+    data['odata.metadata'] = odataMetadata;
+    if (carparks != null) {
+      data['value'] = carparks!.map((v) => v.toJson()).toList();
     }
     return data;
   }
-
-
-
 }
-  
-
-
 
 class CarPark {
   String? carParkID;
@@ -60,14 +54,19 @@ class CarPark {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['CarParkID'] = this.carParkID;
-    data['Area'] = this.area;
-    data['Development'] = this.development;
-    data['Location'] = this.location;
-    data['AvailableLots'] = this.availableLots;
-    data['LotType'] = this.lotType;
-    data['Agency'] = this.agency;
+    data['CarParkID'] = carParkID;
+    data['Area'] = area;
+    data['Development'] = development;
+    data['Location'] = location;
+    data['AvailableLots'] = availableLots;
+    data['LotType'] = lotType;
+    data['Agency'] = agency;
     return data;
+  }
+
+  @override
+  String toString() {
+    return "id:$carParkID,area:$area,development:$development,location:$location,available lots:$availableLots,lotType:$lotType,agency:$agency";
   }
 
   toLowerCase() {}

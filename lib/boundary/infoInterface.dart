@@ -19,7 +19,7 @@ class InfoInterface extends StatefulWidget {
 
 class _InfoInterfaceState extends State<InfoInterface> {
   late Future<CarPark> carparkFuture;
-  late bool inFav;
+  bool inFav = false;
 
   @override
   void initState() {
@@ -54,18 +54,14 @@ class _InfoInterfaceState extends State<InfoInterface> {
                 //favorites button. please add navigation
                 actions: [
                   IconButton(
-                      icon: inFav
-                          ? const Icon(Icons.star)
-                          : const Icon(Icons.star_border),
+                      icon: inFav ? const Icon(Icons.star) : const Icon(Icons.star_border),
                       onPressed: () {
                         favList.then((value) {
                           if (!inFav) {
-                            FavouritesController.addToFavourites(
-                                value, carpark.data!);
+                            FavouritesController.addToFavourites(value, carpark.data!);
                             favStatusChange(true);
                           } else {
-                            FavouritesController.removeFromFavourites(
-                                value, carpark.data!);
+                            FavouritesController.removeFromFavourites(value, carpark.data!);
                             favStatusChange(false);
                           }
                         });
@@ -114,17 +110,13 @@ class _InfoInterfaceState extends State<InfoInterface> {
                               Container(
                                 height: 50,
                                 color: Colors.grey.shade400,
-                                child: Center(
-                                    child:
-                                        Text('${pricing.data!.weekdaysRate1}')),
+                                child: Center(child: Text('${pricing.data!.weekdaysRate1}')),
                               ),
                               if (pricing.data!.weekdaysRate2 != null)
                                 Container(
                                   height: 50,
                                   color: Colors.grey.shade400,
-                                  child: Center(
-                                      child: Text(
-                                          '${pricing.data!.weekdaysRate2}')),
+                                  child: Center(child: Text('${pricing.data!.weekdaysRate2}')),
                                 ),
                               Container(
                                 height: 50,
@@ -146,17 +138,13 @@ class _InfoInterfaceState extends State<InfoInterface> {
                               Container(
                                 height: 50,
                                 color: Colors.grey.shade400,
-                                child: Center(
-                                    child:
-                                        Text('${pricing.data!.weekdaysRate1}')),
+                                child: Center(child: Text('${pricing.data!.weekdaysRate1}')),
                               ),
                               if (pricing.data!.weekdaysRate2 != null)
                                 Container(
                                   height: 50,
                                   color: Colors.grey.shade400,
-                                  child: Center(
-                                      child: Text(
-                                          '${pricing.data!.weekdaysRate2}')),
+                                  child: Center(child: Text('${pricing.data!.weekdaysRate2}')),
                                 ),
                               Container(
                                 height: 50,
@@ -177,9 +165,7 @@ class _InfoInterfaceState extends State<InfoInterface> {
                               Container(
                                 height: 50,
                                 color: Colors.grey.shade400,
-                                child: Center(
-                                    child:
-                                        Text('${pricing.data!.saturdayRate}')),
+                                child: Center(child: Text('${pricing.data!.saturdayRate}')),
                               ),
                               Container(
                                 height: 50,
@@ -200,9 +186,8 @@ class _InfoInterfaceState extends State<InfoInterface> {
                               Container(
                                 height: 50,
                                 color: Colors.grey.shade400,
-                                child: Center(
-                                    child: Text(
-                                        '${pricing.data!.sundayPublicholidayRate}')),
+                                child:
+                                    Center(child: Text('${pricing.data!.sundayPublicholidayRate}')),
                               ),
                               Container(
                                 height: 50,
@@ -228,11 +213,8 @@ class _InfoInterfaceState extends State<InfoInterface> {
                     padding: const EdgeInsets.all(8),
                     child: ElevatedButton(
                         onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const CalculatorInterface()));
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => const CalculatorInterface()));
                         },
                         child: const Text('Parking Fee Calculator')),
                   ),
