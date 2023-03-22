@@ -47,17 +47,16 @@ class FavouritesEntity {
 
     // 2. convert the string into a list of carParkIDs
     List<String> idList = contents.toString().split(',');
+    // the file ends with a trailing comma
+    // drop that line
+    idList.removeLast();
 
     // 3. match carParkIDs against carParkList to obtain the full object CarPark
     List<CarPark> favouritesList = [];
-    for (var item in idList) {
-      CarPark target = await CarParkController().getCarpark(item);
+    for (var id in idList) {
+      CarPark target = CarParkController.getCarparkByID(id);
       favouritesList.add(target);
     }
-    // the file ends with a trailing comma
-    // so the result of the above function will create one more empty carpark
-    // drop that carpark
-    favouritesList.removeLast();
 
     // 4. return favourites list
     return favouritesList;

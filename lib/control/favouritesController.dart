@@ -43,4 +43,8 @@ class FavouritesController {
     // return to calling program for continuous use
     return favList;
   }
+
+  static void clearFavList() {
+    FavouritesEntity.updateFavouritesTxt([]);
+  }
 }

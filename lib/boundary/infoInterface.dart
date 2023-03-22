@@ -19,6 +19,7 @@ class InfoInterface extends StatefulWidget {
 class _InfoInterfaceState extends State<InfoInterface> {
   late CarPark carpark;
   bool inFav = false;
+  String status = 'loading';
 
   @override
   void initState() {
@@ -30,8 +31,10 @@ class _InfoInterfaceState extends State<InfoInterface> {
 
   void fetchFavStatus(CarPark carpark, bool setFav) async {
     bool temp = await FavouritesController.inFavourites(carpark);
+    print("carpark in fav: $temp");
     setState(() {
       inFav = temp;
+      status = 'ready';
     });
   }
 
@@ -41,9 +44,10 @@ class _InfoInterfaceState extends State<InfoInterface> {
     });
   }
 
+  @override
   Widget build(BuildContext context) {
     Future<List<CarPark>> favList = FavouritesEntity.fetchFavouritesList();
-    if (carpark != null) {
+    if (status == 'ready') {
       return Scaffold(
         //carpark development name as appbar
         appBar: AppBar(
@@ -229,12 +233,11 @@ class _InfoInterfaceState extends State<InfoInterface> {
           ],
         ),
       );
-    } else if (carpark == null) {
-      return Text('error');
+    } else {
+      //when carpark info loading:
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
     }
-    //when carpark info loading:
-    return const Center(
-      child: CircularProgressIndicator(),
-    );
   }
 }
