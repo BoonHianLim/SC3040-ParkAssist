@@ -4,6 +4,7 @@ import '../control/favouritesController.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
 
+///controller class for getting information on car parks from the API
 class CarParkController {
   static String Url =
       'http://datamall2.mytransport.sg/ltaodataservice/CarParkAvailabilityv2';
@@ -16,13 +17,13 @@ class CarParkController {
     return carparkList;
   }
 
-  // refresh carpark list
+  /// Method to refresh carpark list
   static Future<void> updateCarparkList() async {
     carparkList = await getAllCarparks();
     print("carpark list updated");
   }
 
-  // get a carpark from the list by id
+  ///Method to get a carpark from the list by id
   static getCarparkByID(String id) {
     for (var i = 0; i < carparkList.length; i++) {
       if (carparkList[i].carParkID == id) {
@@ -31,7 +32,7 @@ class CarParkController {
     }
   }
 
-  //return list of all carpark objects as future, filter out non hdb and non type c scarparks
+  ///Method to return list of all carpark objects as future, filter out non hdb and non type c scarparks
   static Future<List<CarPark>> getAllCarparks() async {
     List<CarPark> carparkList = [];
     var client = Client();
@@ -61,7 +62,8 @@ class CarParkController {
     }
     return carparkList;
   }
-
+}
+/*
   //will be commented out
   //return single carpark object based on carparkid as future
   Future<CarPark> getCarpark(carParkID) async {
@@ -131,3 +133,4 @@ class CarParkController {
 //         "name: ${element.development}, available lots: ${element.availableLots}, agency:${element.agency}");
 //   });
 // }
+*/

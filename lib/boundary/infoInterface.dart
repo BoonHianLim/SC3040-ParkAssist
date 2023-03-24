@@ -7,7 +7,7 @@ import 'package:parkassist/entity/carParkList.dart';
 import 'package:parkassist/entity/favouritesEntity.dart';
 import 'package:parkassist/entity/pricing.dart';
 
-//takes carParkID string of the carpark object as parameter
+///interface to display information on the selected car park
 class InfoInterface extends StatefulWidget {
   final String carParkID;
   const InfoInterface({super.key, required this.carParkID});
@@ -45,6 +45,7 @@ class _InfoInterfaceState extends State<InfoInterface> {
     });
   }
 
+  ///method to build InfoInterface
   @override
   Widget build(BuildContext context) {
     Future<List<CarPark>> favList = FavouritesEntity.fetchFavouritesList();

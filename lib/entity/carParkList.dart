@@ -1,3 +1,4 @@
+/// Entity class for CarParkList, contains the list of car parks
 class CarParkList {
   String? odataMetadata;
   List<CarPark>? carparks;
@@ -24,6 +25,7 @@ class CarParkList {
   }
 }
 
+/// Entity class for information on a car park.
 class CarPark {
   String? carParkID;
   String? area;
