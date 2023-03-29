@@ -14,26 +14,27 @@ class SearchController{
   var data = [];
   List<CarPark> results = [];
 
-  Future<List<CarPark>> getDevList({String? query}) async {
-    try {
-      final carparklist = await CarParkController.getAllCarparks();
-      results = carparklist;
-      if (query!= null && query.isNotEmpty){
-        results = results.where((element) => element.development!.toLowerCase().contains((query.toLowerCase()))).toList();
-      }
-      else{
-        return results;
-      }
+  // Future<List<CarPark>> getDevList({String? query}) async {
+  //   try {
+  //     final carparklist = await CarParkController.getAllCarparks();
+  //     results = carparklist;
+  //     if (query!= null && query.isNotEmpty){
+  //       results = results.where((element) => element.development!.toLowerCase().contains((query.toLowerCase()))).toList();
+  //     }
+  //     else{
+  //       return results;
+  //     }
       
-    } on Exception catch (e) {
-      print('error: $e');
-    }
-    return results;
-  }
+  //   } on Exception catch (e) {
+  //     print('error: $e');
+  //   }
+  //   return results;
+  // }
 
-  Future <List<String>> getDevString() async{
-    final carparkList = await CarParkController.getAllCarparks();
+  List<String> getDevString() {
+    CarParkController.updateCarparkList();
     List<String> developments = [];
+    List<CarPark> carparkList = CarParkController.getCarparkList();
     for (var i=0; i < carparkList.length ; i++){
       var development = carparkList[i].development;
       if(development != null && development.isNotEmpty){
@@ -42,6 +43,19 @@ class SearchController{
     }
     return developments;
   }
+
+  // List<String> getDevString2() {
+  //   List<CarPark> carparkList = CarParkController.getCarparkList();
+  //   List<String> developments = [];
+  //   for (var i=0; i < carparkList.length ; i++){
+  //     var development = carparkList[i].development;
+  //     if(development != null && development.isNotEmpty){
+  //       developments.add(development);
+  //     }
+  //   }
+  //   return developments;
+  // }
+
 
   //   Future<List<CarPark>> getDevList({String? query}) async {
   //   try {

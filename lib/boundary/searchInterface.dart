@@ -18,13 +18,10 @@ class _SearchInterfaceState extends State<SearchInterface> {
   void initState() {
     SearchController();
     super.initState();
-    // _getdevstring();
+
   }
 
-  // late List<
-  // _getdevstring() async {
-  //   devlist = await SearchController().getDevList();
-  // }
+
   // @override
   // Widget build(BuildContext context) {
   //   return SafeArea(
@@ -151,12 +148,7 @@ class _SearchInterfaceState extends State<SearchInterface> {
 }
 
 class CustomSearchDelegate extends SearchDelegate {
-  //final CarParkController carParkController = CarParkController();
-  //Future<List<CarPark>> carparklist = CarParkController().getAllCarparks();
-  List<String> test = ['Dog', 'Batok', 'HIllVIew'];
-  //List<String> carparkdevelopment = SearchController.getCarparkDevelopments(developments);
-  //List cars = await CarParkController().getAllCarparks();
-  List<String> devlist = ['Dog', 'Batok', 'HIllVIew'];
+
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
@@ -184,15 +176,13 @@ class CustomSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    return FutureBuilder<List<String>>(
-        future: SearchController().getDevString(),
-        builder: (context, snapshot) {
-          List<String> matchQuery = [];
-          for (var word in snapshot.data!) {
-            if (word.toLowerCase().contains(query.toLowerCase())) {
-              matchQuery.add(word);
-            }
+    List<String> matchQuery = [];
+    List<String> development = SearchController().getDevString();
+    for (var word in development) {
+      if (word.toLowerCase().contains(query.toLowerCase())) {
+          matchQuery.add(word);
           }
+        }
 
           return ListView.builder(
             itemCount: matchQuery.length,
@@ -203,7 +193,7 @@ class CustomSearchDelegate extends SearchDelegate {
               );
             },
           );
-        });
+        
   }
 
   // @override
@@ -265,28 +255,23 @@ class CustomSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    return FutureBuilder<List<String>>(
-        future: SearchController().getDevString(),
-        builder: (context, snapshot) {
-          print(snapshot.data);
-          List<String> matchQuery = [];
-          for (var word in snapshot.data!) {
-            if (word.toLowerCase().contains(query.toLowerCase())) {
-              matchQuery.add(word);
-            }
+    List<String> matchQuery = [];
+    List<String> development = SearchController().getDevString();
+    for (var word in development) {
+      if (word.toLowerCase().contains(query.toLowerCase())) {
+          matchQuery.add(word);
           }
+        }
 
           return ListView.builder(
             itemCount: matchQuery.length,
             itemBuilder: (context, index) {
               var result = matchQuery[index];
               return ListTile(
-                  title: Text(result),
-                  onTap: () => Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => MapInterface())));
+                title: Text(result),
+              );
             },
           );
-        });
   }
 }
 
@@ -316,27 +301,6 @@ class CustomSearchDelegate extends SearchDelegate {
 
 
 
-
-//           return ListView.builder(
-//               itemCount: snapshot.data!.length,
-//               itemBuilder: (BuildContext context, int index) {
-//                 return Container(
-//                   height: 75,
-//                   color: Colors.white,
-//                   child: Center(
-//                     child: Text(snapshot.data![index].development!),
-//                   ),
-//                 );
-//               });
-//         } else if (snapshot.hasError) {
-//           return Text(snapshot.error.toString());
-//         }
-//         // By default show a loading spinner.
-//         return const CircularProgressIndicator();
-//       },
-//     );
-//   }  
-// }
 
 
 
@@ -449,9 +413,6 @@ class CustomSearchDelegate extends SearchDelegate{
     );
   }
 }
-
-
-
 
   Widget build(BuildContext context) {
     return FutureBuilder<List<CarPark>>(
