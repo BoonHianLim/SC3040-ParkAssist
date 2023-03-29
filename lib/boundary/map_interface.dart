@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:parkassist/boundary/infoInterface.dart';
@@ -8,6 +7,7 @@ import 'package:parkassist/control/map_controller.dart';
 import 'package:parkassist/boundary/favouritesInterface.dart';
 import 'package:parkassist/entity/carParkList.dart';
 
+///Interface to display main page which contains the map
 class MapInterface extends StatefulWidget {
   const MapInterface({super.key});
 
@@ -16,9 +16,13 @@ class MapInterface extends StatefulWidget {
 }
 
 class _MapInterfaceState extends State<MapInterface> {
+  ///Google maps controller, for animating movement of map
   GoogleMapController? mapController;
-  Timer? timer;
+
+  ///Load status of page
   String status = 'waiting';
+
+  ///List of markers to be displayed on map
   Set<Marker> markersList = {};
   @override
   void initState() {
@@ -26,28 +30,21 @@ class _MapInterfaceState extends State<MapInterface> {
     super.initState();
   }
 
-  //initialise map controller by requesing location access then updating user location
+  ///Initialise map by requesing location access then updating user location and updating markers
   initMap() async {
-    //now clicking on go to user location has a ~2sec delay
     await MapController.requestLocationAccess();
     await MapController.updateLocationAccessPermission();
     await MapController.updateCurrentUserLocation();
     await buildMarkers();
-
     //set camera position to userlocation
     MapController.setCurrentCameraPosition(MapController.getCurrentUserLocation());
     setState(() {
       status = 'ready';
       print("map ready");
     });
-    // do i need every second update of current user location? probably not
-    // now is only updated when user clicks on the button
-    // timer = Timer.periodic(const Duration(seconds: 1), (Timer t) async {
-    //   await MapController.updateCurrentUserLocation();
-    //   print("updating current user location");
-    // });
   }
 
+  ///Update list of markers
   buildMarkers() async {
     await CarParkController.updateCarparkList();
     //create markers based on carpark then add to markersList
@@ -63,6 +60,7 @@ class _MapInterfaceState extends State<MapInterface> {
     });
   }
 
+  ///Create a google maps marker given a carpark
   Marker createMarker(CarPark cp, BuildContext context) {
     final Map cpMap = cp.toJson();
     final String id = cpMap["CarParkID"];
@@ -94,7 +92,7 @@ class _MapInterfaceState extends State<MapInterface> {
         ));
   }
 
-  //to define GoogleMapController
+  ///Initialise google map controller
   onMapCreated(GoogleMapController controller) {
     setState(() {
       mapController = controller;
@@ -216,7 +214,7 @@ class _MapInterfaceState extends State<MapInterface> {
     }
   }
 }
-
+//TODO delete when done
 //example of carpark toJson
 //{CarParkID: Y75M, Area: , Development: BLOCK 674 YISHUN AVENUE 4, 
 //Location: 1.420176401 103.8430835, AvailableLots: 327, LotType: C, Agency: HDB}

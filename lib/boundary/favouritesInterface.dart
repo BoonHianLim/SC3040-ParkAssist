@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-
 import 'package:parkassist/control/favouritesController.dart';
 import 'package:parkassist/control/map_controller.dart';
 import 'package:parkassist/entity/carParkList.dart';
 
+///Interface to display favourites
 class FavouritesInterface extends StatefulWidget {
   const FavouritesInterface({super.key});
 
@@ -13,19 +13,7 @@ class FavouritesInterface extends StatefulWidget {
 }
 
 class _FavouritesInterfaceState extends State<FavouritesInterface> {
-  static CarPark carparkdummy = CarPark(
-    carParkID: "012",
-    area: "JE",
-    development: "HDB",
-    location: "JE",
-    availableLots: 10,
-    lotType: "A",
-    agency: "HDB",
-  );
-
-  // _ private to this class
-  // the public class is the Future class
-  // which will use 'await' to convert into the standard class
+  ///List of favourite carparks
   List<CarPark> _favList = [];
   @override
   void initState() {
@@ -33,9 +21,7 @@ class _FavouritesInterfaceState extends State<FavouritesInterface> {
     super.initState();
   }
 
-  // on initiating this interface
-  // wait for favourites list to finish fetching from text file
-  // then, call a change in state
+  ///Get list of favourites from favourites controller then set state
   _setup() async {
     List<CarPark>? favList = await FavouritesController.fetchFavouritesList();
 

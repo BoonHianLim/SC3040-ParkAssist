@@ -1,4 +1,4 @@
-/// Entity class for CarParkList, contains the list of car parks
+///Entity class for CarParkList, contains a list of car parks
 class CarParkList {
   String? odataMetadata;
   List<CarPark>? carparks;
@@ -25,7 +25,7 @@ class CarParkList {
   }
 }
 
-/// Entity class for information on a car park.
+///Entity class for car park, contains all relevant information
 class CarPark {
   String? carParkID;
   String? area;
@@ -70,8 +70,4 @@ class CarPark {
   String toString() {
     return "id:$carParkID,area:$area,development:$development,location:$location,available lots:$availableLots,lotType:$lotType,agency:$agency";
   }
-
-  toLowerCase() {}
-
-  static map(Function(dynamic carPark) param0) {}
 }
