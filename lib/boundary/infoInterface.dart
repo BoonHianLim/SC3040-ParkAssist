@@ -1,11 +1,9 @@
 import 'package:parkassist/boundary/calculator_interface.dart';
-import 'package:parkassist/control/pricing_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:parkassist/control/carParkController.dart';
 import 'package:parkassist/control/favouritesController.dart';
 import 'package:parkassist/entity/carParkList.dart';
 import 'package:parkassist/entity/favouritesEntity.dart';
-import 'package:parkassist/entity/pricing.dart';
 
 ///Interface to display information on the selected car park
 class InfoInterface extends StatefulWidget {
@@ -20,6 +18,24 @@ class _InfoInterfaceState extends State<InfoInterface> {
   late CarPark carpark;
   bool inFav = false;
   String status = 'loading';
+  var HDBCentralAreaList = [
+    'ACB',
+    'BBB',
+    'BRB1',
+    'CY',
+    'DUXM',
+    'HLM',
+    'KAB',
+    'KAS',
+    'KAM',
+    'PRM',
+    'SLS',
+    'SR1',
+    'SR2',
+    'TPM',
+    'UCS',
+    'WCB'
+  ];
 
   @override
   void initState() {
@@ -91,124 +107,31 @@ class _InfoInterfaceState extends State<InfoInterface> {
                   ])),
             ),
             Expanded(
-                child: FutureBuilder<Records>(
-              future:
-                  //use carpark object with getPricingStrings to get pricing string. person doing calculatorcontroller can replace
-                  PricingController().getPricingStrings(carpark),
-              builder: (context, pricing) {
-                if (pricing.hasData) {
-                  var children2 = <Widget>[
-                    //hdb pricing text
-                    if (pricing.data!.weekdaysRate1 != null && pricing.data!.category == 'HDB')
-                      Wrap(children: [
-                        Container(
-                          height: 50,
-                          color: Colors.grey.shade700,
-                          child: const Center(
-                            child: Text('Parking Rates',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                )),
-                          ),
-                        ),
-                        Container(
-                          height: 50,
-                          color: Colors.grey.shade400,
-                          child: Center(child: Text('${pricing.data!.weekdaysRate1}')),
-                        ),
-                        if (pricing.data!.weekdaysRate2 != null)
-                          Container(
-                            height: 50,
-                            color: Colors.grey.shade400,
-                            child: Center(child: Text('${pricing.data!.weekdaysRate2}')),
-                          ),
-                        Container(
-                          height: 50,
-                        ),
-                      ]),
-                    //weekday pricing text
-                    if (pricing.data!.weekdaysRate1 != null && pricing.data!.category != 'HDB')
-                      Wrap(children: [
-                        Container(
-                          height: 50,
-                          color: Colors.grey.shade700,
-                          child: const Center(
-                              child: Text('Weekday Rate',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                  ))),
-                        ),
-                        Container(
-                          height: 50,
-                          color: Colors.grey.shade400,
-                          child: Center(child: Text('${pricing.data!.weekdaysRate1}')),
-                        ),
-                        if (pricing.data!.weekdaysRate2 != null)
-                          Container(
-                            height: 50,
-                            color: Colors.grey.shade400,
-                            child: Center(child: Text('${pricing.data!.weekdaysRate2}')),
-                          ),
-                        Container(
-                          height: 50,
-                        ),
-                      ]),
-                    //saturday pricing text
-                    if (pricing.data!.saturdayRate != null)
-                      Wrap(children: [
-                        Container(
-                          height: 50,
-                          color: Colors.grey.shade700,
-                          child: const Center(
-                              child: Text('Saturday Rate',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                  ))),
-                        ),
-                        Container(
-                          height: 50,
-                          color: Colors.grey.shade400,
-                          child: Center(child: Text('${pricing.data!.saturdayRate}')),
-                        ),
-                        Container(
-                          height: 50,
-                        ),
-                      ]),
-                    //sunday pricing text
-                    if (pricing.data!.sundayPublicholidayRate != null)
-                      Wrap(children: [
-                        Container(
-                          height: 50,
-                          color: Colors.grey.shade700,
-                          child: const Center(
-                              child: Text('Sunday & Public Holidays Rate',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                  ))),
-                        ),
-                        Container(
-                          height: 50,
-                          color: Colors.grey.shade400,
-                          child: Center(child: Text('${pricing.data!.sundayPublicholidayRate}')),
-                        ),
-                        Container(
-                          height: 50,
-                        ),
-                      ]),
-                  ];
-                  return ListView(
-                    padding: const EdgeInsets.all(8),
-                    children: children2,
-                  );
-                } else if (pricing.hasError) {
-                  return Text('${pricing.error}');
-                }
-                //when pricing info still loading/ doesnt load:
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              },
-            )),
+                child: Wrap(children: [
+              Container(
+                height: 50,
+                color: Colors.grey.shade700,
+                child: const Center(
+                  child: Text('Parking Rates',
+                      style: TextStyle(
+                        color: Colors.white,
+                      )),
+                ),
+              ),
+              (HDBCentralAreaList.contains(carpark.carParkID))
+                  ? (Container(
+                      height: 50,
+                      color: Colors.grey.shade400,
+                      child: const Center(
+                          child: Text(
+                              r'$1.20 per half-hour (7:00am to 5:00pm, Mondays to Saturdays), $0.60 per half hour (Other hours)')),
+                    ))
+                  : Container(
+                      height: 50,
+                      color: Colors.grey.shade400,
+                      child: const Center(child: Text(r'$0.60 per half-hour')),
+                    ),
+            ])),
             //calculator button. please add navigation
             Container(
               width: double.infinity,
