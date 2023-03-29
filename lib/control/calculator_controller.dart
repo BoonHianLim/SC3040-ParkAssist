@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:parkassist/entity/carParkList.dart';
 import 'dart:developer';
@@ -7,6 +6,7 @@ class CalculatorController {
   static DateTime startDateTime = DateTime(0000, 0, 0, 0, 0, 0, 0, 0);
   static DateTime endDateTime = DateTime(0000, 0, 0, 0, 0, 0, 0, 0);
   static String price = '';
+  static const bool _logging = true;
   static CarPark carpark = CarPark(
       carParkID: '',
       area: '',
@@ -76,7 +76,6 @@ class CalculatorController {
 
   static Duration getTotalHours() {
     if (endDateTime.minute >= 0 && startDateTime.minute >= 0) {
-      log('log is valid:${endDateTime.difference(startDateTime).toString()}');
       return endDateTime.difference(startDateTime);
     }
     throw (ex) {
@@ -85,7 +84,6 @@ class CalculatorController {
   }
 
   static bool validTime() {
-    log(endDateTime.difference(startDateTime).toString());
     if (getTotalHours().inMinutes > 0) {
       return true;
     } else {
@@ -117,7 +115,6 @@ class CalculatorController {
 
   static int isSunday() {
     List<DateTime> test = calculateDaysInterval(startDateTime, endDateTime);
-    log('days: $test');
     int sunday = 0;
     for (int i = 1; i < test.length - 1; i++) {
       if (test.elementAt(i).weekday == DateTime.sunday) {
@@ -140,7 +137,7 @@ class CalculatorController {
     DateTime dummyEnd = temp.add(const Duration(days: 1));
 
     int numOfSunday = isSunday();
-    log('days: $numOfSunday');
+
     if (startDateTime.day == endDateTime.day) {
       totalCost = _calculateCentralCarpark(startDateTime, endDateTime);
     } else if (startDateTime.day != endDateTime.day &&
@@ -152,29 +149,41 @@ class CalculatorController {
           endDateTime.difference(startDateTime).inHours > 24) {
         firtsday = _calculateCentralCarpark(startDateTime, dummyEnd);
         secondday = _calculateCentralCarpark(dummyStart, endDateTime);
-        betweendays = (((endDateTime.difference(startDateTime).inMinutes -
-                        dummyEnd.difference(startDateTime).inMinutes -
-                        endDateTime.difference(dummyStart).inMinutes) /
-                    1440) *
-                40.8 -
-            numOfSunday * 40.8 +
-            numOfSunday * 28.8);
+        if (hdbCentralAreaList.contains(carpark.carParkID)) {
+          betweendays = (((endDateTime.difference(startDateTime).inMinutes -
+                          dummyEnd.difference(startDateTime).inMinutes -
+                          endDateTime.difference(dummyStart).inMinutes) /
+                      1440) *
+                  40.8 -
+              numOfSunday * 40.8 +
+              numOfSunday * 28.8);
+        } else {
+          betweendays = (((endDateTime.difference(startDateTime).inMinutes -
+                      dummyEnd.difference(startDateTime).inMinutes -
+                      endDateTime.difference(dummyStart).inMinutes) /
+                  1440) *
+              28.8);
+        }
 
-        log('temp: $temp');
-        log('dummynd: $dummyEnd');
-        log('dummy end -startdate: ${dummyEnd.difference(startDateTime)}');
-
-        log('first: $firtsday');
-        log('second: $secondday');
-        log('between: $betweendays');
-
-        log('total duration datetime: ${endDateTime.difference(startDateTime).inMinutes}');
-        log('first day minutes: ${dummyEnd.difference(startDateTime).inMinutes}');
-        log('second day minutes: ${endDateTime.difference(dummyStart).inMinutes}');
         totalCost = firtsday + secondday + betweendays;
       }
     }
-    log('total: $totalCost');
+    if (_logging) {
+      log("--------------- calculateParkingFee Method------------------- ");
+      log('no of sunday : $numOfSunday');
+      log('temp: $temp');
+      log('dummynd: $dummyEnd');
+      log('dummy end -startdate: ${dummyEnd.difference(startDateTime)}');
+
+      log('first: $firtsday');
+      log('second: $secondday');
+      log('between: $betweendays');
+
+      log('total duration datetime: ${endDateTime.difference(startDateTime).inMinutes}');
+      log('first day minutes: ${dummyEnd.difference(startDateTime).inMinutes}');
+      log('second day minutes: ${endDateTime.difference(dummyStart).inMinutes}');
+      log('total: $totalCost');
+    }
     return totalCost;
   }
 
@@ -188,6 +197,8 @@ class CalculatorController {
 
     int surgeduration = 0;
     int normalduration = 0;
+    int surgeDurationCost = 0;
+    int normalDurationCost = 0;
     if (hdbCentralAreaList.contains(getCarparkInfo().carParkID) &&
         start.weekday != DateTime.sunday) {
       if (start.isBefore(startrange)) {
@@ -218,13 +229,27 @@ class CalculatorController {
     } else {
       normalduration = end.difference(start).inMinutes;
     }
+    surgeDurationCost = surgeduration ~/ 30;
+    normalDurationCost = normalduration ~/ 30;
 
-    log('surge: $surgeduration');
-    log('normal: $normalduration');
-    log('total cost: ${surgeduration / 30 * 1.20 + normalduration / 30 * 0.60}');
+    if (surgeduration % 30 != 0) {
+      surgeDurationCost += 1;
+    }
+    if (normalduration % 30 != 0) {
+      normalDurationCost += 1;
+    }
+
+    if (_logging) {
+      log("--------------- calculateCentralCarpark Method------------------- ");
+      log('surge: $surgeduration');
+      log('normal: $normalduration');
+      log('surgeCost: $surgeDurationCost');
+      log('normalCost: $normalDurationCost');
+      log('total cost: ${surgeDurationCost * 1.20 + normalDurationCost * 0.60}');
+    }
 
     return (surgeduration + normalduration > 15)
-        ? (surgeduration / 30 * 1.20 + normalduration / 30 * 0.60)
+        ? (surgeDurationCost * 1.20 + normalDurationCost * 0.60)
         : 0.00;
   }
 }
