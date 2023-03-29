@@ -1,5 +1,6 @@
 import 'package:parkassist/boundary/calculator_interface.dart';
 import 'package:flutter/material.dart';
+import 'package:parkassist/control/calculator_controller.dart';
 import 'package:parkassist/control/carParkController.dart';
 import 'package:parkassist/control/favouritesController.dart';
 import 'package:parkassist/entity/carParkList.dart';
@@ -65,6 +66,7 @@ class _InfoInterfaceState extends State<InfoInterface> {
 
   @override
   Widget build(BuildContext context) {
+    CalculatorController.setCarparkInfo(carpark);
     Future<List<CarPark>> favList = FavouritesEntity.fetchFavouritesList();
     if (status == 'ready') {
       return Scaffold(
@@ -75,7 +77,9 @@ class _InfoInterfaceState extends State<InfoInterface> {
           //favorites button. please add navigation
           actions: [
             IconButton(
-                icon: inFav ? const Icon(Icons.star) : const Icon(Icons.star_border),
+                icon: inFav
+                    ? const Icon(Icons.star)
+                    : const Icon(Icons.star_border),
                 onPressed: () {
                   favList.then((value) {
                     if (!inFav) {
@@ -138,8 +142,10 @@ class _InfoInterfaceState extends State<InfoInterface> {
               padding: const EdgeInsets.all(8),
               child: ElevatedButton(
                   onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => const CalculatorInterface()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const CalculatorInterface()));
                   },
                   child: const Text('Parking Fee Calculator')),
             ),
