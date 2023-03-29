@@ -64,25 +64,97 @@ void main() {
   log("--------------------------------------------------");
 }
 
-void testThis(bool testIsMatrix, Function(void) targetMethod,
+void testThis(Function(void) targetMethod, bool testIsMatrix, bool isCentral,
     List<DateTime> args, List<double> expectedAns) {
+  // Augment list before passing into testThis()
+  // If testing method is SingleTest, then args will contain exactly 2 elements in the list
+  // whereas expectedAns will contain exactly 1 element
+  // If testing method is MatrixTest, then args will contain, in equal numbers, xHeader elements and yHeader elements
+  // will split args exactly into half, first half for xHeader and second half for yHeader
+  // whereas expectedAns will contain exactly half the size of args
+
   if (testIsMatrix) {
-    matrixTest(targetMethod, args, args, expectedAns);
+    // check if args format is correct or not
+
+    List<DateTime> xHeader = [];
+    List.copyRange(xHeader, 0, args, 0, (args.length / 2).floor());
+    List<DateTime> yHeader = [];
+    List.copyRange(
+        yHeader, 0, args, (args.length / 2).floor() + 1, args.length);
+
+    List<List<double>> formattedAns = [[]];
+    List<double> row = [];
+    int counter = 0;
+    for (int i = 0; i < xHeader.length; i++) {
+      row = [];
+      for (int j = 0; j < yHeader.length; j++) {
+        row.add(expectedAns[counter++]);
+      }
+      formattedAns[i] = row;
+    }
+
+    matrixTest(
+        targetMethod, testIsMatrix, isCentral, xHeader, yHeader, formattedAns);
   } else {
-    singleTest(targetMethod, args[0], args[0], expectedAns[0]);
+    // check if args format is correct or not
+
+    DateTime start = args[0];
+    DateTime end = args[1];
+    double formattedAns = expectedAns[0];
+
+    singleTest(targetMethod, testIsMatrix, isCentral, start, end, formattedAns);
   }
 }
 
-void matrixTest(Function(void) targetMethod, List<DateTime> xHeader,
-    List<DateTime> yHeader, List<double> expectedAns) {
+void matrixTest(
+    Function(void) targetMethod,
+    bool testIsMatrix,
+    bool isCentral,
+    List<DateTime> xHeader,
+    List<DateTime> yHeader,
+    List<List<double>> expectedAns) {
+  if (isCentral) {
+    CalculatorController.carpark.area = "BBB";
+  } else {
+    CalculatorController.carpark.area = "";
+  }
+
   test("Matrix Test \t x=? y=? \t Start date time: \t End date time:", () {
-    expect(Function.apply(targetMethod, []), 99999999999999999);
+    expect(Function.apply(targetMethod, []), 9999999999999);
   });
+
+  // Loop check
+  if (xHeader.length != expectedAns.length) {
+    log("Number of elements in the x-axis does not match the expected list!");
+  }
+  if (yHeader.length != expectedAns[0].length) {
+    log("Number of elements in the y-axis does not match the expected list!");
+  }
+
+  for (int i = 0; i < xHeader.length; i++) {
+    for (int j = 0; j < yHeader.length; j++) {
+      CalculatorController.setStartDateTime(xHeader[i]);
+      CalculatorController.setEndDateTime(yHeader[j]);
+      test(
+          "Start: (x=$i) ${xHeader[i].toString()} \t End: (y=$j) ${yHeader[i].toString()} \t Expected: ${expectedAns[i][j]}",
+          () {
+        expect(Function.apply(targetMethod, []), expectedAns[i][j]);
+      });
+    }
+  }
 }
 
-void singleTest(Function(void) targetMethod, DateTime start, DateTime end,
-    double expectedAns) {
-  test("Single Test \t \t Start date time: \t End date time:", () {
-    expect(Function.apply(targetMethod, []), 99999999999999999);
+void singleTest(Function(void) targetMethod, bool testIsMatrix, bool isCentral,
+    DateTime start, DateTime end, double expectedAns) {
+  if (isCentral) {
+    CalculatorController.carpark.area = "BBB";
+  } else {
+    CalculatorController.carpark.area = "";
+  }
+  CalculatorController.setStartDateTime(start);
+  CalculatorController.setEndDateTime(end);
+
+  test("Start: $start \t End: $end \t Expected: $expectedAns", () {
+    expect(Function.apply(targetMethod, []), expectedAns);
   });
 }
