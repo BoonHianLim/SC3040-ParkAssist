@@ -3,34 +3,31 @@ import 'dart:io';
 
 import 'package:parkassist/control/carParkController.dart';
 import 'package:path_provider/path_provider.dart';
-
 import 'package:parkassist/entity/carParkList.dart';
 
-// fully static class
-// purpose: interface with text file as permanent data storage
+///Entity class for favourites to interface with text file as permanent data storage
+///
+///DATA STORAGE FORMAT:
+///
+///Text file in use: favouritesTxt.txt,
+///Location of text file: (AppData)/favouritesTxt.txt
+///
+///Formatting of text file: ID1,ID2,ID3,ID4,...,IDn,
+/// - Everything is written in ONE LINE, no newline will be inside the file
 class FavouritesEntity {
-  /// DATA STORAGE FORMAT:
-  /// Text file in use: favouritesTxt.txt
-  /// Location of text file: (AppData)/favouritesTxt.txt
-  ///
-  /// Formatting of text file: ID1,ID2,ID3,ID4,...,IDn,
-  /// - Everything is written in ONE LINE, no newline will be inside the file
-
-  // get path name for the specified device
+  ///Get path name for the specified device and return it as a future
   static Future<String> get _localPath async {
     final directory = await getApplicationDocumentsDirectory();
-
     return directory.path;
   }
 
-  // get the exact file inside appdata of local device using path name
+  ///Get the exact file inside appdata of local device using path name and return it as a future
   static Future<File> get _localFile async {
     final path = await _localPath;
     return File('$path/favouritesTxt.txt');
   }
 
-  // this function will run whenever the program needs the favourites list
-  // fetch the full list of favourites list from favouritesTxt and store into List<CarPark>
+  ///Fetch favourites list from phone storage txt file and return it as a future
   static Future<List<CarPark>> fetchFavouritesList() async {
     late String contents;
     // 1. read the contents of the file into a string
@@ -62,8 +59,7 @@ class FavouritesEntity {
     return favouritesList;
   }
 
-  // this function will run whenever favouritesList got added into or removed from
-  // update the txt file with the updates favouritesList
+  ///Update favourites list txt file on phone storage
   static void updateFavouritesTxt(List<CarPark> favList) async {
     // 1. Retrieve only the carParkIDs from each CarPark
     // 2. convert list of carParkIDs into a string

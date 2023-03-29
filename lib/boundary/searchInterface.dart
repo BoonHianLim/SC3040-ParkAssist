@@ -14,13 +14,13 @@ class SearchInterface extends StatefulWidget {
 }
 
 class _SearchInterfaceState extends State<SearchInterface> {
-
   @override
   void initState() {
     SearchController();
     super.initState();
     // _getdevstring();
   }
+
   // late List<
   // _getdevstring() async {
   //   devlist = await SearchController().getDevList();
@@ -181,31 +181,29 @@ class CustomSearchDelegate extends SearchDelegate {
       },
     );
   }
-    @override
-  Widget buildResults(BuildContext context){
+
+  @override
+  Widget buildResults(BuildContext context) {
     return FutureBuilder<List<String>>(
-      future:SearchController().getDevString(),
-      builder: (context, snapshot) {
-        List<String> matchQuery = [];
-        for(var word in snapshot.data!) {
-          if (word.toLowerCase().contains(query.toLowerCase())){
+        future: SearchController().getDevString(),
+        builder: (context, snapshot) {
+          List<String> matchQuery = [];
+          for (var word in snapshot.data!) {
+            if (word.toLowerCase().contains(query.toLowerCase())) {
               matchQuery.add(word);
-             }
+            }
           }
 
-          
-          
-            return ListView.builder(
-              itemCount: matchQuery.length,
-              itemBuilder: (context,index){
-                var result = matchQuery[index];
-                return ListTile(
-                  title: Text(result),
-                );
-              },
-            );
-      }
-    );
+          return ListView.builder(
+            itemCount: matchQuery.length,
+            itemBuilder: (context, index) {
+              var result = matchQuery[index];
+              return ListTile(
+                title: Text(result),
+              );
+            },
+          );
+        });
   }
 
   // @override
@@ -268,33 +266,27 @@ class CustomSearchDelegate extends SearchDelegate {
   @override
   Widget buildSuggestions(BuildContext context) {
     return FutureBuilder<List<String>>(
-      future:SearchController().getDevString(),
-      builder: (context, snapshot) {
-        List<String> matchQuery = [];
-        for(var word in snapshot.data!) {
-          if (word.toLowerCase().contains(query.toLowerCase())){
+        future: SearchController().getDevString(),
+        builder: (context, snapshot) {
+          print(snapshot.data);
+          List<String> matchQuery = [];
+          for (var word in snapshot.data!) {
+            if (word.toLowerCase().contains(query.toLowerCase())) {
               matchQuery.add(word);
-             }
+            }
           }
 
-          
-          
-            return ListView.builder(
-              itemCount: matchQuery.length,
-              itemBuilder: (context,index){
-                var result = matchQuery[index];
-                return ListTile(
+          return ListView.builder(
+            itemCount: matchQuery.length,
+            itemBuilder: (context, index) {
+              var result = matchQuery[index];
+              return ListTile(
                   title: Text(result),
                   onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MapInterface())
-                  )
-                );
-              },
-            );
-      }
-    );
+                      context, MaterialPageRoute(builder: (context) => MapInterface())));
+            },
+          );
+        });
   }
 }
 
