@@ -6,7 +6,7 @@ class CalculatorController {
   static DateTime startDateTime = DateTime(0000, 0, 0, 0, 0, 0, 0, 0);
   static DateTime endDateTime = DateTime(0000, 0, 0, 0, 0, 0, 0, 0);
   static String price = '';
-  static const bool _logging = true;
+  static bool logging = true;
   static CarPark carpark = CarPark(
       carParkID: '',
       area: '',
@@ -168,7 +168,7 @@ class CalculatorController {
         totalCost = firtsday + secondday + betweendays;
       }
     }
-    if (_logging) {
+    if (logging) {
       log("--------------- calculateParkingFee Method------------------- ");
       log('no of sunday : $numOfSunday');
       log('temp: $temp');
@@ -239,7 +239,7 @@ class CalculatorController {
       normalDurationCost += 1;
     }
 
-    if (_logging) {
+    if (logging) {
       log("--------------- calculateCentralCarpark Method------------------- ");
       log('surge: $surgeduration');
       log('normal: $normalduration');
