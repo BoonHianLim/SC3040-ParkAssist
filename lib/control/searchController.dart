@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:parkassist/control/carParkController.dart';
 import 'package:parkassist/entity/carParkList.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -15,31 +16,60 @@ class SearchController{
 
   Future<List<CarPark>> getDevList({String? query}) async {
     try {
-      for (var apipage = 0; apipage < 5; apipage++) {
-        var pageUrl;
-          if (apipage == 0) {
-            pageUrl = urlList;
-          } else {
-          pageUrl = urlList + r"?$skip=" + (apipage * 500).toString();
-          }
-
-        var response = await http.get(Uri.parse(pageUrl), headers: apikey);
-        if (response.statusCode == 200) {
-          data = json.decode(response.body);
-          results = data.map((e) => CarPark.fromJson(e)).toList();
-          if (query!= null){
-            results = results.where((element) => element.development!.toLowerCase().contains((query.toLowerCase()))).toList();
-          }
-        } else {
-          print("fetch error");
-        }
+      final carparklist = await CarParkController.getAllCarparks();
+      results = carparklist;
+      if (query!= null && query.isNotEmpty){
+        results = results.where((element) => element.development!.toLowerCase().contains((query.toLowerCase()))).toList();
       }
+      else{
+        return results;
+      }
+      
     } on Exception catch (e) {
       print('error: $e');
     }
     return results;
   }
-  
+
+  Future <List<String>> getDevString() async{
+    final carparkList = await CarParkController.getAllCarparks();
+    List<String> developments = [];
+    for (var i=0; i < carparkList.length ; i++){
+      var development = carparkList[i].development;
+      if(development != null && development.isNotEmpty){
+        developments.add(development);
+      }
+    }
+    return developments;
+  }
+
+  //   Future<List<CarPark>> getDevList({String? query}) async {
+  //   try {
+  //     for (var apipage = 0; apipage < 5; apipage++) {
+  //       var pageUrl;
+  //         if (apipage == 0) {
+  //           pageUrl = urlList;
+  //         } else {
+  //         pageUrl = urlList + r"?$skip=" + (apipage * 500).toString();
+  //         }
+
+  //       var response = await http.get(Uri.parse(pageUrl), headers: apikey);
+  //       if (response.statusCode == 200) {
+  //         data = json.decode(response.body);
+  //         results = data.map((e) => CarPark.fromJson(e)).toList();
+          
+  //         if (query!= null){
+  //           results = results.where((element) => element.development!.toLowerCase().contains((query.toLowerCase()))).toList();
+  //         }
+  //       } else {
+  //         print("fetch error");
+  //       }
+  //     }
+  //   } on Exception catch (e) {
+  //     print('error: $e');
+  //   }
+  //   return results;
+  // }
 }
    
 // Future<Developments> getDevelopments(CarPark carpark) async {

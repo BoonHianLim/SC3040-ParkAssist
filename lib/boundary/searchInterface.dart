@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:parkassist/boundary/infoInterface.dart';
+import 'package:parkassist/boundary/map_interface.dart';
 import 'package:parkassist/control/searchController.dart';
 import 'package:parkassist/entity/carParkList.dart';
 import 'package:parkassist/control/carParkController.dart';
@@ -12,14 +14,17 @@ class SearchInterface extends StatefulWidget {
 }
 
 class _SearchInterfaceState extends State<SearchInterface> {
-  @override
-  SearchController _devList = SearchController();
+
   @override
   void initState() {
     SearchController();
     super.initState();
+    // _getdevstring();
   }
-
+  // late List<
+  // _getdevstring() async {
+  //   devlist = await SearchController().getDevList();
+  // }
   // @override
   // Widget build(BuildContext context) {
   //   return SafeArea(
@@ -103,7 +108,7 @@ class _SearchInterfaceState extends State<SearchInterface> {
   //     ),
   //   );
   // }
-
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<CarPark>>(
         future: CarParkController.getAllCarparks(),
@@ -111,6 +116,8 @@ class _SearchInterfaceState extends State<SearchInterface> {
           return Scaffold(
               appBar: AppBar(
                 title: const Text('Search'),
+                backgroundColor: const Color(0xFF00E640),
+                foregroundColor: Colors.black,
                 actions: [
                   IconButton(
                       icon: const Icon(Icons.search),
@@ -149,7 +156,7 @@ class CustomSearchDelegate extends SearchDelegate {
   List<String> test = ['Dog', 'Batok', 'HIllVIew'];
   //List<String> carparkdevelopment = SearchController.getCarparkDevelopments(developments);
   //List cars = await CarParkController().getAllCarparks();
-
+  List<String> devlist = ['Dog', 'Batok', 'HIllVIew'];
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
@@ -174,99 +181,123 @@ class CustomSearchDelegate extends SearchDelegate {
       },
     );
   }
-  //   @override
-  // Widget buildResults(BuildContext context){
-  //   return FutureBuilder<List<CarPark>>(
-  //     future:CarParkController().getAllCarparks(),
-  //     builder: (context, snapshot) {
-  //       List<String> matchQuery = [];
-  //       List<String> devlist = [];
-  //         for (int i = 0; i < snapshot.data!.length ; i++){
-  //           for (int j = 0; j < snapshot.data![i].development!.length; j++){
-  //             for(var word in snapshot.)
-  //               if (word.toLowerCase().contains(query.toLowerCase())){
-  //                 matchQuery.add(snapshot.data![i].development!);
-  //             }
+    @override
+  Widget buildResults(BuildContext context){
+    return FutureBuilder<List<String>>(
+      future:SearchController().getDevString(),
+      builder: (context, snapshot) {
+        List<String> matchQuery = [];
+        for(var word in snapshot.data!) {
+          if (word.toLowerCase().contains(query.toLowerCase())){
+              matchQuery.add(word);
+             }
+          }
 
-  //         }
-  //         }
-  //           return ListView.builder(
-  //             itemCount: matchQuery.length,
-  //             itemBuilder: (context,index){
-  //               var result = matchQuery[index];
-  //               return ListTile(
-  //                 title: Text(result),
-  //               );
-  //             },
+          
+          
+            return ListView.builder(
+              itemCount: matchQuery.length,
+              itemBuilder: (context,index){
+                var result = matchQuery[index];
+                return ListTile(
+                  title: Text(result),
+                );
+              },
+            );
+      }
+    );
+  }
+
+  // @override
+  // Widget buildResults(BuildContext context) {
+  //   return FutureBuilder<List<CarPark>>(
+  //       //future:SearchController().getDevelopments()
+  //       future: SearchController().getDevList(query: query),
+  //       builder: (context, snapshot) {
+  //         if (!snapshot.hasData) {
+  //           return const Center(
+  //             child: CircularProgressIndicator(),
   //           );
-  //     }
-  //   );
+  //         }
+  //         List<CarPark>? data = snapshot.data;
+  //         return ListView.builder(
+  //             itemCount: data?.length,
+  //             itemBuilder: (context, index) {
+  //               return ListTile(
+  //                 title: Row(
+  //                   children: [
+  //                     Container(
+  //                       width: 60,
+  //                       height: 60,
+  //                       decoration: BoxDecoration(
+  //                         color: const Color.fromARGB(255, 56, 17, 165),
+  //                         borderRadius: BorderRadius.circular(10),
+  //                       ),
+  //                       child: Center(
+  //                         child: Text(
+  //                           '${data?[index].carParkID}',
+  //                           style: const TextStyle(
+  //                               fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+  //                           overflow: TextOverflow.clip,
+  //                         ),
+  //                       ),
+  //                     ),
+  //                     const SizedBox(width: 20),
+  //                     Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+  //                       Text(
+  //                         '${data?[index].development}',
+  //                         style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+  //                       ),
+  //                       const SizedBox(height: 10),
+  //                       Text(
+  //                         '${data?[index].availableLots}',
+  //                         style: const TextStyle(
+  //                           color: Colors.black,
+  //                           fontSize: 14,
+  //                           fontWeight: FontWeight.w400,
+  //                         ),
+  //                       ),
+  //                     ])
+  //                   ],
+  //                 ),
+  //               );
+  //             });
+  //       });
   // }
 
   @override
-  Widget buildResults(BuildContext context) {
-    return FutureBuilder<List<CarPark>>(
-        //future:SearchController().getDevelopments()
-        future: SearchController().getDevList(query: query),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          List<CarPark>? data = snapshot.data;
-          return ListView.builder(
-              itemCount: data?.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Row(
-                    children: [
-                      Container(
-                        width: 60,
-                        height: 60,
-                        decoration: BoxDecoration(
-                          color: const Color.fromARGB(255, 56, 17, 165),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Center(
-                          child: Text(
-                            '${data?[index].carParkID}',
-                            style: const TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
-                            overflow: TextOverflow.clip,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 20),
-                      Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                        Text(
-                          '${data?[index].development}',
-                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          '${data?[index].availableLots}',
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ])
-                    ],
-                  ),
-                );
-              });
-        });
-  }
-
-  @override
   Widget buildSuggestions(BuildContext context) {
-    return const Center(
-      child: Text('Search Carpark'),
+    return FutureBuilder<List<String>>(
+      future:SearchController().getDevString(),
+      builder: (context, snapshot) {
+        List<String> matchQuery = [];
+        for(var word in snapshot.data!) {
+          if (word.toLowerCase().contains(query.toLowerCase())){
+              matchQuery.add(word);
+             }
+          }
+
+          
+          
+            return ListView.builder(
+              itemCount: matchQuery.length,
+              itemBuilder: (context,index){
+                var result = matchQuery[index];
+                return ListTile(
+                  title: Text(result),
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MapInterface())
+                  )
+                );
+              },
+            );
+      }
     );
   }
 }
+
 
 
   //       List<String> carparks = SearchController().getCarparkDevelopments();

@@ -13,6 +13,7 @@ class CarParkController {
   };
   static List<CarPark> carparkList = [];
 
+  ///Method to return car park list stored locally
   static List<CarPark> getCarparkList() {
     return carparkList;
   }
@@ -32,7 +33,7 @@ class CarParkController {
     }
   }
 
-  ///Method to return list of all carpark objects as future, filter out non hdb and non type c scarparks
+  ///Method to return list of all carpark objects as future from the api, filter out non hdb and non type c scarparks
   static Future<List<CarPark>> getAllCarparks() async {
     List<CarPark> carparkList = [];
     var client = Client();
