@@ -7,7 +7,7 @@ import 'package:parkassist/entity/carParkList.dart';
 import 'package:parkassist/entity/favouritesEntity.dart';
 import 'package:parkassist/entity/pricing.dart';
 
-///interface to display information on the selected car park
+///Interface to display information on the selected car park
 class InfoInterface extends StatefulWidget {
   final String carParkID;
   const InfoInterface({super.key, required this.carParkID});
@@ -30,6 +30,7 @@ class _InfoInterfaceState extends State<InfoInterface> {
     super.initState();
   }
 
+  ///Get favourite status from favourites controller
   void fetchFavStatus(CarPark carpark, bool setFav) async {
     bool temp = await FavouritesController.inFavourites(carpark);
     print("carpark in fav: $temp");
@@ -39,13 +40,13 @@ class _InfoInterfaceState extends State<InfoInterface> {
     });
   }
 
+  ///Change favourite status
   void favStatusChange(bool setFav) {
     setState(() {
       inFav = setFav;
     });
   }
 
-  ///method to build InfoInterface
   @override
   Widget build(BuildContext context) {
     Future<List<CarPark>> favList = FavouritesEntity.fetchFavouritesList();
@@ -58,9 +59,7 @@ class _InfoInterfaceState extends State<InfoInterface> {
           //favorites button. please add navigation
           actions: [
             IconButton(
-                icon: inFav
-                    ? const Icon(Icons.star)
-                    : const Icon(Icons.star_border),
+                icon: inFav ? const Icon(Icons.star) : const Icon(Icons.star_border),
                 onPressed: () {
                   favList.then((value) {
                     if (!inFav) {
@@ -100,8 +99,7 @@ class _InfoInterfaceState extends State<InfoInterface> {
                 if (pricing.hasData) {
                   var children2 = <Widget>[
                     //hdb pricing text
-                    if (pricing.data!.weekdaysRate1 != null &&
-                        pricing.data!.category == 'HDB')
+                    if (pricing.data!.weekdaysRate1 != null && pricing.data!.category == 'HDB')
                       Wrap(children: [
                         Container(
                           height: 50,
@@ -116,23 +114,20 @@ class _InfoInterfaceState extends State<InfoInterface> {
                         Container(
                           height: 50,
                           color: Colors.grey.shade400,
-                          child: Center(
-                              child: Text('${pricing.data!.weekdaysRate1}')),
+                          child: Center(child: Text('${pricing.data!.weekdaysRate1}')),
                         ),
                         if (pricing.data!.weekdaysRate2 != null)
                           Container(
                             height: 50,
                             color: Colors.grey.shade400,
-                            child: Center(
-                                child: Text('${pricing.data!.weekdaysRate2}')),
+                            child: Center(child: Text('${pricing.data!.weekdaysRate2}')),
                           ),
                         Container(
                           height: 50,
                         ),
                       ]),
                     //weekday pricing text
-                    if (pricing.data!.weekdaysRate1 != null &&
-                        pricing.data!.category != 'HDB')
+                    if (pricing.data!.weekdaysRate1 != null && pricing.data!.category != 'HDB')
                       Wrap(children: [
                         Container(
                           height: 50,
@@ -146,15 +141,13 @@ class _InfoInterfaceState extends State<InfoInterface> {
                         Container(
                           height: 50,
                           color: Colors.grey.shade400,
-                          child: Center(
-                              child: Text('${pricing.data!.weekdaysRate1}')),
+                          child: Center(child: Text('${pricing.data!.weekdaysRate1}')),
                         ),
                         if (pricing.data!.weekdaysRate2 != null)
                           Container(
                             height: 50,
                             color: Colors.grey.shade400,
-                            child: Center(
-                                child: Text('${pricing.data!.weekdaysRate2}')),
+                            child: Center(child: Text('${pricing.data!.weekdaysRate2}')),
                           ),
                         Container(
                           height: 50,
@@ -175,8 +168,7 @@ class _InfoInterfaceState extends State<InfoInterface> {
                         Container(
                           height: 50,
                           color: Colors.grey.shade400,
-                          child: Center(
-                              child: Text('${pricing.data!.saturdayRate}')),
+                          child: Center(child: Text('${pricing.data!.saturdayRate}')),
                         ),
                         Container(
                           height: 50,
@@ -197,9 +189,7 @@ class _InfoInterfaceState extends State<InfoInterface> {
                         Container(
                           height: 50,
                           color: Colors.grey.shade400,
-                          child: Center(
-                              child: Text(
-                                  '${pricing.data!.sundayPublicholidayRate}')),
+                          child: Center(child: Text('${pricing.data!.sundayPublicholidayRate}')),
                         ),
                         Container(
                           height: 50,
@@ -225,10 +215,8 @@ class _InfoInterfaceState extends State<InfoInterface> {
               padding: const EdgeInsets.all(8),
               child: ElevatedButton(
                   onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const CalculatorInterface()));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => const CalculatorInterface()));
                   },
                   child: const Text('Parking Fee Calculator')),
             ),

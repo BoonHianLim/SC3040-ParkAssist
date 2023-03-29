@@ -1,3 +1,4 @@
+//TODO merge into another file, maybe carpark controller
 class Pricing {
   String? help;
   bool? success;
@@ -8,8 +9,7 @@ class Pricing {
   Pricing.fromJson(Map<String, dynamic> json) {
     help = json['help'];
     success = json['success'];
-    result =
-        json['result'] != null ? new Result.fromJson(json['result']) : null;
+    result = json['result'] != null ? new Result.fromJson(json['result']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -31,13 +31,7 @@ class Result {
   Links? lLinks;
   int? total;
 
-  Result(
-      {this.resourceId,
-      this.fields,
-      this.q,
-      this.records,
-      this.lLinks,
-      this.total});
+  Result({this.resourceId, this.fields, this.q, this.records, this.lLinks, this.total});
 
   Result.fromJson(Map<String, dynamic> json) {
     resourceId = json['resource_id'];
