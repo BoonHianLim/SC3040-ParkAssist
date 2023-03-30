@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:parkassist/control/carParkController.dart';
+import 'package:parkassist/control/carpark_controller.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:parkassist/entity/carParkList.dart';
+import 'package:parkassist/entity/carpark.dart';
 
 ///Entity class for favourites to interface with text file as permanent data storage
 ///

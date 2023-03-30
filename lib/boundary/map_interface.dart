@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:parkassist/boundary/infoInterface.dart';
-import 'package:parkassist/boundary/searchInterface.dart';
-import 'package:parkassist/control/carParkController.dart';
+import 'package:parkassist/boundary/info_interface.dart';
+import 'package:parkassist/boundary/search_interface.dart';
+import 'package:parkassist/control/carpark_controller.dart';
 import 'package:parkassist/control/map_controller.dart';
-import 'package:parkassist/boundary/favouritesInterface.dart';
-import 'package:parkassist/entity/carParkList.dart';
+import 'package:parkassist/boundary/favourites_interface.dart';
+import 'package:parkassist/entity/carpark.dart';
 
 ///Interface to display main page which contains the map
 class MapInterface extends StatefulWidget {
@@ -24,6 +24,7 @@ class _MapInterfaceState extends State<MapInterface> {
 
   ///List of markers to be displayed on map
   Set<Marker> markersList = {};
+
   @override
   void initState() {
     initMap();
@@ -37,10 +38,10 @@ class _MapInterfaceState extends State<MapInterface> {
     await MapController.updateCurrentUserLocation();
     await buildMarkers();
     //set camera position to userlocation
-    MapController.setCurrentCameraPosition(MapController.getCurrentUserLocation());
+    MapController.setCurrentCameraPosition(
+        MapController.getCurrentUserLocation());
     setState(() {
       status = 'ready';
-      print("map ready");
     });
   }
 
@@ -60,12 +61,14 @@ class _MapInterfaceState extends State<MapInterface> {
     });
   }
 
-  ///Create a google maps marker given a carpark
+  ///Returns a google maps marker given a carpark
   Marker createMarker(CarPark cp, BuildContext context) {
     final Map cpMap = cp.toJson();
     final String id = cpMap["CarParkID"];
-    final double latitude = double.parse((cpMap["Location"] as String).split(" ")[0]);
-    final double longitude = double.parse((cpMap["Location"] as String).split(" ")[1]);
+    final double latitude =
+        double.parse((cpMap["Location"] as String).split(" ")[0]);
+    final double longitude =
+        double.parse((cpMap["Location"] as String).split(" ")[1]);
 
     final LatLng latlng = LatLng(latitude, longitude);
     final int availableLots = cpMap["AvailableLots"];
@@ -86,7 +89,9 @@ class _MapInterfaceState extends State<MapInterface> {
           onTap: () async {
             print("tapped $id");
             await Navigator.push(
-                context, MaterialPageRoute(builder: (context) => InfoInterface(carParkID: id)));
+                context,
+                MaterialPageRoute(
+                    builder: (context) => InfoInterface(carParkID: id)));
             await buildMarkers();
           },
         ));
@@ -106,10 +111,7 @@ class _MapInterfaceState extends State<MapInterface> {
         appBar: AppBar(
           leading: IconButton(
               padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-              onPressed: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => const SearchInterface()));
-              },
+              onPressed: () {},
               icon: const Icon(
                 Icons.search,
                 size: 36,
@@ -125,10 +127,7 @@ class _MapInterfaceState extends State<MapInterface> {
           actions: [
             IconButton(
                 padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const FavouritesInterface()));
-                },
+                onPressed: () {},
                 icon: const Icon(
                   Icons.stars,
                   size: 36,
@@ -144,8 +143,12 @@ class _MapInterfaceState extends State<MapInterface> {
               padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
               onPressed: () async {
                 await Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => const SearchInterface()));
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const SearchInterface()));
                 await buildMarkers();
+                mapController!.animateCamera(CameraUpdate.newCameraPosition(
+                    MapController.getCurrentCameraPosition()));
               },
               icon: const Icon(
                 Icons.search,
@@ -163,11 +166,13 @@ class _MapInterfaceState extends State<MapInterface> {
             IconButton(
                 padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
                 onPressed: () async {
-                  await Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const FavouritesInterface()));
+                  await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const FavouritesInterface()));
                   await buildMarkers();
-                  mapController!.animateCamera(
-                      CameraUpdate.newCameraPosition(MapController.getCurrentCameraPosition()));
+                  mapController!.animateCamera(CameraUpdate.newCameraPosition(
+                      MapController.getCurrentCameraPosition()));
                 },
                 icon: const Icon(
                   Icons.stars,
@@ -179,6 +184,9 @@ class _MapInterfaceState extends State<MapInterface> {
           alignment: AlignmentDirectional.bottomStart,
           children: [
             GoogleMap(
+              onCameraMove: (position) {
+                MapController.setCurrentCameraPosition(position);
+              },
               onMapCreated: onMapCreated,
               initialCameraPosition: MapController.getCurrentCameraPosition(),
               myLocationEnabled:
@@ -190,12 +198,14 @@ class _MapInterfaceState extends State<MapInterface> {
               padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
               child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      shape: const CircleBorder(), backgroundColor: Colors.black),
+                      shape: const CircleBorder(),
+                      backgroundColor: Colors.black),
                   onPressed: () async {
                     if (MapController.getLocationAccessGranted()) {
                       await MapController.updateCurrentUserLocation();
                       mapController!.animateCamera(
-                          CameraUpdate.newCameraPosition(MapController.getCurrentUserLocation()));
+                          CameraUpdate.newCameraPosition(
+                              MapController.getCurrentUserLocation()));
                     } else {
                       await MapController.requestLocationAccess().then((value) {
                         MapController.updateLocationAccessPermission();
@@ -214,7 +224,3 @@ class _MapInterfaceState extends State<MapInterface> {
     }
   }
 }
-//TODO delete when done
-//example of carpark toJson
-//{CarParkID: Y75M, Area: , Development: BLOCK 674 YISHUN AVENUE 4, 
-//Location: 1.420176401 103.8430835, AvailableLots: 327, LotType: C, Agency: HDB}

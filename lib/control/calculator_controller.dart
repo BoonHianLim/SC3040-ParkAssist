@@ -1,12 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:parkassist/entity/carParkList.dart';
+import 'package:parkassist/entity/carpark.dart';
 import 'dart:developer';
 
+///Controller class to manage parking fare calculator
 class CalculatorController {
+  ///Start date and time
   static DateTime startDateTime = DateTime(0000, 0, 0, 0, 0, 0, 0, 0);
+
+  ///End date and time
   static DateTime endDateTime = DateTime(0000, 0, 0, 0, 0, 0, 0, 0);
+
+  ///Price
   static String price = '';
+
+  ///For debugging purposes
+  ///
+  ///If set to true console will log messages
   static bool logging = true;
+
+  ///Currently selected carpark
   static CarPark carpark = CarPark(
       carParkID: '',
       area: '',
@@ -16,6 +28,7 @@ class CalculatorController {
       lotType: '',
       agency: '');
 
+  ///List of carpark codes in central area
   static final List<String> hdbCentralAreaList = [
     'ACB',
     'BBB',
@@ -35,29 +48,36 @@ class CalculatorController {
     'WCB'
   ];
 
-  static resetDateTime() {
+  ///Reset start and end datetime
+  static void resetDateTime() {
     setEndDateTime(DateTime(0, 0, 0, 0, 0, 0, 0, 0));
     setStartDateTime(DateTime(0, 0, 0, 0, 0, 0, 0, 0));
   }
 
-  static setStartDateTime(DateTime dateTime) {
+  ///Set start datetime
+  static void setStartDateTime(DateTime dateTime) {
     startDateTime = dateTime;
   }
 
-  static setEndDateTime(DateTime dateTime) {
+  ///Set end datetime
+  static void setEndDateTime(DateTime dateTime) {
     endDateTime = dateTime;
   }
 
-  static setCarparkInfo(CarPark info) {
-    carpark.carParkID = info.carParkID;
-    carpark.area = info.area;
-    carpark.development = info.development;
-    carpark.location = info.location;
-    carpark.availableLots = info.availableLots;
-    carpark.lotType = info.lotType;
-    carpark.agency = info.agency;
+  ///Set carpark info given a carpark
+  static setCarparkInfo(CarPark cp) {
+    carpark.carParkID = cp.carParkID;
+    carpark.area = cp.area;
+    carpark.development = cp.development;
+    carpark.location = cp.location;
+    carpark.availableLots = cp.availableLots;
+    carpark.lotType = cp.lotType;
+    carpark.agency = cp.agency;
   }
 
+  ///Use datepicker to get user to choose a date
+  ///
+  ///Returns a future of selected date
   static Future<DateTime?> pickDate(BuildContext context) {
     return showDatePicker(
         context: context,
@@ -66,6 +86,9 @@ class CalculatorController {
         lastDate: DateTime(DateTime.now().year + 3));
   }
 
+  ///Use timepicker to get user to choose a time
+  ///
+  ///Returns a future of selected time
   static Future<TimeOfDay?> pickTime(BuildContext context) {
     return showTimePicker(
         context: context,
@@ -74,6 +97,7 @@ class CalculatorController {
             hour: DateTime.now().hour, minute: DateTime.now().minute));
   }
 
+  ///Get total hours between start and end datetime and returns a Duration
   static Duration getTotalHours() {
     if (endDateTime.minute >= 0 && startDateTime.minute >= 0) {
       return endDateTime.difference(startDateTime);
@@ -83,6 +107,7 @@ class CalculatorController {
     };
   }
 
+  ///Returns whether datetime given is valid
   static bool validTime() {
     if (getTotalHours().inMinutes > 0) {
       return true;
@@ -91,7 +116,8 @@ class CalculatorController {
     }
   }
 
-  static calculateParkingCost() {
+  ///Calculate parking cost and set price to it
+  static void calculateParkingCost() {
     double tempPrice = calculateParkingFee();
     if (!validTime()) {
       price = 'Set End Date & Time to be after Start Date & Time';
@@ -104,6 +130,7 @@ class CalculatorController {
     }
   }
 
+  ///Returns a list of all dates between start to end date
   static List<DateTime> calculateDaysInterval(
       DateTime startDate, DateTime endDate) {
     List<DateTime> days = [];
@@ -113,6 +140,7 @@ class CalculatorController {
     return days;
   }
 
+  ///Returns number of sundays in list of dates selected
   static int isSunday() {
     List<DateTime> test = calculateDaysInterval(startDateTime, endDateTime);
     int sunday = 0;
@@ -124,6 +152,7 @@ class CalculatorController {
     return sunday;
   }
 
+  ///Calculate parking fare of a carpark not in central area
   static double calculateParkingFee() {
     double totalCost = 0;
     double firtsday = 0;
@@ -168,6 +197,7 @@ class CalculatorController {
         totalCost = firtsday + secondday + betweendays;
       }
     }
+    // for debugging
     if (logging) {
       log("--------------- calculateParkingFee Method------------------- ");
       log('no of sunday : $numOfSunday');
@@ -187,10 +217,12 @@ class CalculatorController {
     return totalCost;
   }
 
+  ///Return currently selected carpark
   static CarPark getCarparkInfo() {
     return carpark;
   }
 
+  ///Calculate parking fare of a carpark in central area
   static double _calculateCentralCarpark(DateTime start, DateTime end) {
     DateTime startrange = DateTime(start.year, start.month, start.day, 7, 0);
     DateTime endrange = DateTime(start.year, start.month, start.day, 17, 0);
@@ -238,7 +270,7 @@ class CalculatorController {
     if (normalduration % 30 != 0) {
       normalDurationCost += 1;
     }
-
+    // for debugging
     if (logging) {
       log("--------------- calculateCentralCarpark Method------------------- ");
       log('surge: $surgeduration');

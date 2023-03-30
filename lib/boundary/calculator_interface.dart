@@ -1,6 +1,7 @@
 import 'package:parkassist/control/calculator_controller.dart';
 import 'package:flutter/material.dart';
 
+///Interface to display calculator
 class CalculatorInterface extends StatefulWidget {
   const CalculatorInterface({super.key});
 
@@ -12,7 +13,6 @@ class _CalculatorInterfaceState extends State<CalculatorInterface> {
   @override
   void initState() {
     super.initState();
-
     CalculatorController.resetDateTime();
   }
 
@@ -21,26 +21,42 @@ class _CalculatorInterfaceState extends State<CalculatorInterface> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text('${CalculatorController.getCarparkInfo().development}'),
-        backgroundColor: Colors.green,
-        leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(Icons.arrow_back)),
+        centerTitle: true,
+        title: FittedBox(
+            child:
+                Text('${CalculatorController.getCarparkInfo().development}')),
+        backgroundColor: const Color(0xFF00E640),
+        foregroundColor: Colors.black,
+        elevation: 0,
+        // filler to center title
+        actions: [
+          IconButton(
+            color: const Color(0xFF00E640),
+            icon: const Icon(Icons.abc),
+            onPressed: () {},
+          )
+        ],
       ),
       body: Column(
         children: <Widget>[
           Flexible(
             flex: 2,
             child: Container(
-                color: Colors.grey.shade400,
-                padding: const EdgeInsets.all(25),
-                width: double.infinity,
-                child: Text(
-                  'Available Lots :  ${CalculatorController.getCarparkInfo().availableLots.toString()}',
-                  style: const TextStyle(fontSize: 24),
-                )),
+              color: Colors.grey.shade400,
+              padding: const EdgeInsets.all(16),
+              width: double.infinity,
+              child: RichText(
+                  text: TextSpan(
+                      text: 'Available Lots: ',
+                      style: const TextStyle(color: Colors.black),
+                      children: <TextSpan>[
+                    TextSpan(
+                        text: CalculatorController.getCarparkInfo()
+                            .availableLots
+                            .toString(),
+                        style: const TextStyle(color: Colors.blue))
+                  ])),
+            ),
           ),
           Flexible(
             flex: 14,

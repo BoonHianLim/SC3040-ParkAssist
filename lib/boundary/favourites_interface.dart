@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:parkassist/control/favouritesController.dart';
+import 'package:parkassist/control/favourites_controller.dart';
 import 'package:parkassist/control/map_controller.dart';
-import 'package:parkassist/entity/carParkList.dart';
+import 'package:parkassist/entity/carpark.dart';
 
 ///Interface to display favourites
 class FavouritesInterface extends StatefulWidget {
@@ -47,8 +47,14 @@ class _FavouritesInterfaceState extends State<FavouritesInterface> {
                 Navigator.pop(context);
               },
             ),
-            title: const Text('Favourites'),
-            backgroundColor: Colors.green,
+            title: const Text(
+              "FAVOURITES",
+              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 24),
+            ),
+            centerTitle: true,
+            elevation: 0,
+            backgroundColor: const Color(0xFF00E640),
+            foregroundColor: Colors.black,
           ),
           body: const Center(
             child: Text("You do not have any favourite carparks!"),
@@ -66,8 +72,14 @@ class _FavouritesInterfaceState extends State<FavouritesInterface> {
                 Navigator.pop(context);
               },
             ),
-            title: const Text('Favourites'),
-            backgroundColor: Colors.green,
+            title: const Text(
+              "FAVOURITES",
+              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 24),
+            ),
+            centerTitle: true,
+            elevation: 0,
+            backgroundColor: const Color(0xFF00E640),
+            foregroundColor: Colors.black,
           ),
 
           // the rest is a list of carparks that got added into favourites
@@ -82,8 +94,11 @@ class _FavouritesInterfaceState extends State<FavouritesInterface> {
                     String location = _favList[index].location!;
                     double lat = double.parse(location.split(" ")[0]);
                     double lng = double.parse(location.split(" ")[1]);
-                    MapController.setCurrentCameraPosition(
-                        CameraPosition(target: LatLng(lat, lng), zoom: 15, tilt: 0, bearing: 0));
+                    MapController.setCurrentCameraPosition(CameraPosition(
+                        target: LatLng(lat, lng),
+                        zoom: 18,
+                        tilt: 0,
+                        bearing: 0));
                     print("Back to map centred");
                     Navigator.pop(context);
                   },
