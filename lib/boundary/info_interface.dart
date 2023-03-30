@@ -19,7 +19,7 @@ class _InfoInterfaceState extends State<InfoInterface> {
   late CarPark carpark;
   bool inFav = false;
   String status = 'loading';
-  var HDBCentralAreaList = [
+  var hdbCentralAreaList = [
     'ACB',
     'BBB',
     'BRB1',
@@ -72,9 +72,12 @@ class _InfoInterfaceState extends State<InfoInterface> {
       return Scaffold(
         //carpark development name as appbar
         appBar: AppBar(
-          title: Text('${carpark.development}'),
-          backgroundColor: Colors.green,
-          //favorites button. please add navigation
+          centerTitle: true,
+          title: FittedBox(child: Text('${carpark.development}')),
+          backgroundColor: const Color(0xFF00E640),
+          foregroundColor: Colors.black,
+          elevation: 0,
+          //favorites button
           actions: [
             IconButton(
                 icon: inFav
@@ -122,21 +125,25 @@ class _InfoInterfaceState extends State<InfoInterface> {
                       )),
                 ),
               ),
-              (HDBCentralAreaList.contains(carpark.carParkID))
+              (hdbCentralAreaList.contains(carpark.carParkID))
                   ? (Container(
-                      height: 50,
+                      height: 70,
                       color: Colors.grey.shade400,
-                      child: const Center(
-                          child: Text(
-                              r'$1.20 per half-hour (7:00am to 5:00pm, Mondays to Saturdays), $0.60 per half hour (Other hours)')),
-                    ))
+                      child: Center(
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: const [
+                            Text(r'$1.20 per half-hour'),
+                            Text(r'(7:00am to 5:00pm, Mondays to Saturdays)'),
+                            Text(r'$0.60 per half hour (Other hours)'),
+                          ]))))
                   : Container(
                       height: 50,
                       color: Colors.grey.shade400,
                       child: const Center(child: Text(r'$0.60 per half-hour')),
                     ),
             ])),
-            //calculator button. please add navigation
+            //calculator button
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(8),

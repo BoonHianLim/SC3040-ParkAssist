@@ -47,8 +47,14 @@ class _FavouritesInterfaceState extends State<FavouritesInterface> {
                 Navigator.pop(context);
               },
             ),
-            title: const Text('Favourites'),
-            backgroundColor: Colors.green,
+            title: const Text(
+              "FAVOURITES",
+              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 24),
+            ),
+            centerTitle: true,
+            elevation: 0,
+            backgroundColor: const Color(0xFF00E640),
+            foregroundColor: Colors.black,
           ),
           body: const Center(
             child: Text("You do not have any favourite carparks!"),
@@ -66,8 +72,14 @@ class _FavouritesInterfaceState extends State<FavouritesInterface> {
                 Navigator.pop(context);
               },
             ),
-            title: const Text('Favourites'),
-            backgroundColor: Colors.green,
+            title: const Text(
+              "FAVOURITES",
+              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 24),
+            ),
+            centerTitle: true,
+            elevation: 0,
+            backgroundColor: const Color(0xFF00E640),
+            foregroundColor: Colors.black,
           ),
 
           // the rest is a list of carparks that got added into favourites

@@ -111,12 +111,7 @@ class _MapInterfaceState extends State<MapInterface> {
         appBar: AppBar(
           leading: IconButton(
               padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const SearchInterface()));
-              },
+              onPressed: () {},
               icon: const Icon(
                 Icons.search,
                 size: 36,
@@ -132,12 +127,7 @@ class _MapInterfaceState extends State<MapInterface> {
           actions: [
             IconButton(
                 padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const FavouritesInterface()));
-                },
+                onPressed: () {},
                 icon: const Icon(
                   Icons.stars,
                   size: 36,
@@ -194,6 +184,9 @@ class _MapInterfaceState extends State<MapInterface> {
           alignment: AlignmentDirectional.bottomStart,
           children: [
             GoogleMap(
+              onCameraMove: (position) {
+                MapController.setCurrentCameraPosition(position);
+              },
               onMapCreated: onMapCreated,
               initialCameraPosition: MapController.getCurrentCameraPosition(),
               myLocationEnabled:

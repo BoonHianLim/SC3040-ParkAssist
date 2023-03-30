@@ -18,6 +18,7 @@ class _SearchInterfaceState extends State<SearchInterface> {
     return Scaffold(
         appBar: AppBar(
           title: const Text('Search'),
+          elevation: 0,
           backgroundColor: const Color(0xFF00E640),
           foregroundColor: Colors.black,
           actions: [

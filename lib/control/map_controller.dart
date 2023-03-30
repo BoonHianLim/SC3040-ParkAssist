@@ -8,12 +8,12 @@ class MapController {
   static bool locationAccessGranted = false;
 
   ///Current camera position stored in map controller
-  static CameraPosition currentCameraPosition =
-      const CameraPosition(target: LatLng(1.287953, 103.851784), zoom: 15, tilt: 0, bearing: 0);
+  static CameraPosition currentCameraPosition = const CameraPosition(
+      target: LatLng(1.287953, 103.851784), zoom: 16, tilt: 0, bearing: 0);
 
   ///Camera position of current user location stored in map controller
-  static CameraPosition currentUserLocation =
-      const CameraPosition(target: LatLng(1.287953, 103.851784), zoom: 15, tilt: 0, bearing: 0);
+  static CameraPosition currentUserLocation = const CameraPosition(
+      target: LatLng(1.287953, 103.851784), zoom: 16, tilt: 0, bearing: 0);
   //getter functions
   ///Return bool on whether location access is granted
   static bool getLocationAccessGranted() {
@@ -91,7 +91,10 @@ class MapController {
     if (MapController.getLocationAccessGranted()) {
       await getCurrentLocation().then((value) {
         MapController.setCurrentUserLocation(CameraPosition(
-            target: LatLng(value.latitude, value.longitude), zoom: 15, tilt: 0, bearing: 0));
+            target: LatLng(value.latitude, value.longitude),
+            zoom: 15,
+            tilt: 0,
+            bearing: 0));
       });
     }
   }
