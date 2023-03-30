@@ -4,6 +4,7 @@ import 'package:parkassist/control/map_controller.dart';
 import 'package:parkassist/entity/carpark.dart';
 import 'package:parkassist/control/carpark_controller.dart';
 
+///Interface to display the search page
 class SearchInterface extends StatefulWidget {
   const SearchInterface({super.key});
 
@@ -60,12 +61,12 @@ class _SearchInterfaceState extends State<SearchInterface> {
   }
 }
 
+///Custom search delegate
 class CustomSearchDelegate extends SearchDelegate {
   @override
   List<Widget> buildActions(BuildContext context) {
     return [
       IconButton(
-        //icon: Icon(Icons.close)
         //clear query on press
         onPressed: () {
           query = '';
@@ -106,7 +107,6 @@ class CustomSearchDelegate extends SearchDelegate {
               double lng = double.parse(location.split(" ")[1]);
               MapController.setCurrentCameraPosition(CameraPosition(
                   target: LatLng(lat, lng), zoom: 18, tilt: 0, bearing: 0));
-              print("Back to map centred");
               // pop once to initial search screen then once more to map
               Navigator.pop(context);
               Navigator.pop(context);
@@ -142,7 +142,6 @@ class CustomSearchDelegate extends SearchDelegate {
               double lng = double.parse(location.split(" ")[1]);
               MapController.setCurrentCameraPosition(CameraPosition(
                   target: LatLng(lat, lng), zoom: 18, tilt: 0, bearing: 0));
-              print("Back to map centred");
               // pop once to initial search screen then once more to map
               Navigator.pop(context);
               Navigator.pop(context);

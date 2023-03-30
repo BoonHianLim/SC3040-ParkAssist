@@ -1,6 +1,7 @@
 import 'package:parkassist/control/calculator_controller.dart';
 import 'package:flutter/material.dart';
 
+///Interface to display calculator
 class CalculatorInterface extends StatefulWidget {
   const CalculatorInterface({super.key});
 

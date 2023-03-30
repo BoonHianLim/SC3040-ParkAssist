@@ -24,6 +24,7 @@ class _MapInterfaceState extends State<MapInterface> {
 
   ///List of markers to be displayed on map
   Set<Marker> markersList = {};
+
   @override
   void initState() {
     initMap();
@@ -41,7 +42,6 @@ class _MapInterfaceState extends State<MapInterface> {
         MapController.getCurrentUserLocation());
     setState(() {
       status = 'ready';
-      print("map ready");
     });
   }
 
@@ -61,7 +61,7 @@ class _MapInterfaceState extends State<MapInterface> {
     });
   }
 
-  ///Create a google maps marker given a carpark
+  ///Returns a google maps marker given a carpark
   Marker createMarker(CarPark cp, BuildContext context) {
     final Map cpMap = cp.toJson();
     final String id = cpMap["CarParkID"];
@@ -224,7 +224,3 @@ class _MapInterfaceState extends State<MapInterface> {
     }
   }
 }
-//TODO delete when done
-//example of carpark toJson
-//{CarParkID: Y75M, Area: , Development: BLOCK 674 YISHUN AVENUE 4, 
-//Location: 1.420176401 103.8430835, AvailableLots: 327, LotType: C, Agency: HDB}

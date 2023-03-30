@@ -16,9 +16,16 @@ class InfoInterface extends StatefulWidget {
 }
 
 class _InfoInterfaceState extends State<InfoInterface> {
+  ///Carpark to display info on
   late CarPark carpark;
+
+  ///Whether carpark is in favourites list
   bool inFav = false;
+
+  ///Loading status
   String status = 'loading';
+
+  ///List of carpark codes in central area
   var hdbCentralAreaList = [
     'ACB',
     'BBB',
@@ -40,9 +47,8 @@ class _InfoInterfaceState extends State<InfoInterface> {
 
   @override
   void initState() {
-    //uses getCarparkByID() to get carpark object
+    // uses getCarparkByID() to get carpark object
     carpark = CarParkController.getCarparkByID(widget.carParkID);
-    print(carpark);
     fetchFavStatus(carpark, inFav);
     super.initState();
   }
@@ -50,7 +56,6 @@ class _InfoInterfaceState extends State<InfoInterface> {
   ///Get favourite status from favourites controller
   void fetchFavStatus(CarPark carpark, bool setFav) async {
     bool temp = await FavouritesController.inFavourites(carpark);
-    print("carpark in fav: $temp");
     setState(() {
       inFav = temp;
       status = 'ready';
