@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:parkassist/entity/carParkList.dart';
+import 'package:parkassist/entity/carpark.dart';
 import 'dart:developer';
 
 class CalculatorController {

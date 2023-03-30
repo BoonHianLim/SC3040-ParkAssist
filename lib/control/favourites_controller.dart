@@ -1,5 +1,5 @@
-import 'package:parkassist/entity/carParkList.dart';
-import 'package:parkassist/entity/favouritesEntity.dart';
+import 'package:parkassist/entity/carpark.dart';
+import 'package:parkassist/entity/favourites_entity.dart';
 
 ///Controller class for editing favourites list
 class FavouritesController {
@@ -32,7 +32,8 @@ class FavouritesController {
   }
 
   ///Remove a carpark from list of favourites
-  static List<CarPark> removeFromFavourites(List<CarPark> favList, CarPark carpark) {
+  static List<CarPark> removeFromFavourites(
+      List<CarPark> favList, CarPark carpark) {
     // favList is supposed to contain that carpark
     // and this function is only supposed to call itself when the carpark is in favList
     // in the case where it isn't, run nothing
