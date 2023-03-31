@@ -143,7 +143,7 @@ class CalculatorController {
 
   ///Returns whether datetime given is valid
   static bool validTime() {
-    if (getTotalHours().inMinutes > 0) {
+    if (getTotalHours().inMinutes >= 0) {
       return true;
     } else {
       return false;
@@ -191,9 +191,6 @@ class CalculatorController {
     DateTime start = startDateTime;
     DateTime end = endDateTime;
     double price = 0;
-    if (start.isAtSameMomentAs(end)) {
-      return 0;
-    }
     if (!validTime()) {
       return -1;
     }
@@ -467,12 +464,12 @@ class CalculatorController {
   // }
 }
 
-// void main(List<String> args) {
-//   CalculatorController.carpark.carParkID = "BBB";
-//   CalculatorController.setStartDateTime(DateTime(2023, 4, 2, 12, 0, 0));
-//   CalculatorController.setEndDateTime(
-//     DateTime(2023, 4, 3, 16, 0, 0),
-//   );
-//   print(CalculatorController.calculateParkingFee());
-//   return;
-// }
+void main(List<String> args) {
+  CalculatorController.carpark.carParkID = "BBB";
+  CalculatorController.setStartDateTime(DateTime(2023, 4, 2, 12, 0, 0));
+  CalculatorController.setEndDateTime(
+    DateTime(2023, 4, 2, 12, 0, 0),
+  );
+  print(CalculatorController.calculateParkingFee());
+  return;
+}
