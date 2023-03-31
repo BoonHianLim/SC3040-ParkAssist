@@ -1,8 +1,5 @@
-import 'dart:developer';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:parkassist/control/calculator_controller.dart';
-import 'package:parkassist/entity/carpark.dart';
 
 void main() {
   // disable calculator logging because these tests will be ran many times
