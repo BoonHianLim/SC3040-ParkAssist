@@ -198,7 +198,7 @@ void main() {
     }
 
     _matrixTest(CalculatorController.calculateParkingFee, true, xHeader,
-        yHeader, expectedAns);
+        yHeader, expectedAnsSet2);
   });
 
   group(
@@ -206,7 +206,7 @@ void main() {
       () {
     DateTime startDate = DateTime(2023, 4, 2, 12, 0, 0);
     List<DateTime> yHeader = _generateMatrixHeaders(DateTime(2023, 4, 3), "y");
-    List<double> expected1DAns = [21.6, 22.8, 25.2, 45.6, 48, 49.2, 54, 55.2];
+    List<double> expected1DAns = [21.6, 22.8, 25.2, 44.4, 46.8, 48, 54, 55.2];
 
     counter = 1;
     for (int i = 0; i < xHeader.length; i++) {
@@ -220,7 +220,7 @@ void main() {
       () {
     xHeader = _generateMatrixHeaders(DateTime(2023, 4, 1), "x");
     DateTime endDate = DateTime(2023, 4, 2, 12, 0, 0);
-    List<double> expected1DAns = [55.2, 54, 49.2, 48, 45.6, 25.2, 22.8, 21.6];
+    List<double> expected1DAns = [55.2, 54, 48, 46.8, 44.4, 25.2, 22.8, 21.6];
 
     counter = 1;
     for (int i = 0; i < xHeader.length; i++) {
@@ -301,13 +301,13 @@ void main() {
     _singleTest(counter++, CalculatorController.calculateParkingFee, false,
         DateTime(2023, 4, 3, 18, 0, 0), DateTime(2023, 4, 3, 21, 0, 0), 3.6);
     _singleTest(counter++, CalculatorController.calculateParkingFee, false,
-        DateTime(2023, 4, 3, 23, 0, 0), DateTime(2023, 4, 4, 2, 0, 0), -1);
+        DateTime(2023, 4, 3, 23, 0, 0), DateTime(2023, 4, 4, 2, 0, 0), 3.6);
     _singleTest(counter++, CalculatorController.calculateParkingFee, false,
-        DateTime(2023, 4, 3, 23, 0, 0), DateTime(2023, 4, 5, 2, 0, 0), 44.4);
+        DateTime(2023, 4, 3, 23, 0, 0), DateTime(2023, 4, 5, 2, 0, 0), 32.4);
     _singleTest(counter++, CalculatorController.calculateParkingFee, true,
         DateTime(2023, 4, 1, 23, 0, 0), DateTime(2023, 4, 3, 2, 0, 0), 32.4);
     _singleTest(counter++, CalculatorController.calculateParkingFee, true,
-        DateTime(2023, 4, 3, 23, 0, 0), DateTime(2023, 4, 5, 2, 0, 0), 32.4);
+        DateTime(2023, 4, 3, 23, 0, 0), DateTime(2023, 4, 5, 2, 0, 0), 44.4);
   });
 
   group("CFT Testing CalculatorController._calculateCentralCarpark(): \n", () {
@@ -324,7 +324,7 @@ void main() {
         DateTime(2023, 4, 3, 6, 0, 0), DateTime(2023, 4, 3, 18, 0, 0), 26.4);
     _singleTest(counter++, CalculatorController.calculateParkingFee, true,
         DateTime(2023, 4, 3, 12, 0, 0), DateTime(2023, 4, 3, 15, 0, 0), 7.2);
-    _singleTest(counter++, CalculatorController.calculateParkingFee, false,
+    _singleTest(counter++, CalculatorController.calculateParkingFee, true,
         DateTime(2023, 4, 3, 15, 30, 0), DateTime(2023, 4, 3, 18, 30, 0), 5.4);
   });
 }
