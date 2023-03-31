@@ -86,11 +86,11 @@ class _CalculatorInterfaceState extends State<CalculatorInterface> {
                         onPressed: () async {
                           if (!mounted) return;
                           final date =
-                              await CalculatorController.pickDate(context);
+                              await CalculatorController.pickStartDate(context);
                           if (date == null) return;
                           if (!mounted) return;
                           final time =
-                              await CalculatorController.pickTime(context);
+                              await CalculatorController.pickStartTime(context);
                           if (time == null) return;
                           setState(() {
                             CalculatorController.setStartDateTime(DateTime(
@@ -132,11 +132,11 @@ class _CalculatorInterfaceState extends State<CalculatorInterface> {
                         onPressed: () async {
                           if (!mounted) return;
                           final date =
-                              await CalculatorController.pickDate(context);
+                              await CalculatorController.pickEndDate(context);
                           if (date == null) return;
                           if (!mounted) return;
                           final time =
-                              await CalculatorController.pickTime(context);
+                              await CalculatorController.pickEndTime(context);
                           if (time == null) return;
                           setState(() {
                             CalculatorController.setEndDateTime(DateTime(

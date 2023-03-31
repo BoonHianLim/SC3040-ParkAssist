@@ -343,7 +343,7 @@ void _matrixTest(Function targetMethod, bool isCentral, List<DateTime> xHeader,
       CalculatorController.setStartDateTime(xHeader[i]);
       CalculatorController.setEndDateTime(yHeader[j]);
       test(
-          "${counter++}. Start: (x=$i) ${xHeader[i].toString()} \t End: (y=$j) ${yHeader[i].toString()} \t Expected: ${expectedAns[i][j]} Calculated: ${CalculatorController.calculateParkingFee()}",
+          "${counter++}. Start: (x=$i) ${xHeader[i].toString()} \t End: (y=$j) ${yHeader[j].toString()} \t Expected: ${expectedAns[i][j]} Calculated: ${CalculatorController.calculateParkingFee()}",
           () {
         CalculatorController.setStartDateTime(xHeader[i]);
         CalculatorController.setEndDateTime(yHeader[j]);
