@@ -118,23 +118,23 @@ void main() {
         counter++,
         CalculatorController.calculateParkingFee as Function(void p1),
         true,
-        DateTime(2023, 4, 2, 6, 0, 0),
-        DateTime(2023, 4, 3, 3, 0, 0),
-        -1); //!!
+        DateTime(2023, 4, 2, 12, 0, 0),
+        DateTime(2023, 4, 3, 6, 0, 0),
+        21.6);
     _singleTest(
         counter++,
         CalculatorController.calculateParkingFee as Function(void p1),
         true,
         DateTime(2023, 4, 2, 12, 0, 0),
-        DateTime(2023, 4, 3, 3, 0, 0),
-        -1); //!!
+        DateTime(2023, 4, 3, 12, 0, 0),
+        34.8); //!!
     _singleTest(
         counter++,
         CalculatorController.calculateParkingFee as Function(void p1),
         true,
-        DateTime(2023, 4, 2, 18, 0, 0),
-        DateTime(2023, 4, 3, 3, 0, 0),
-        -1); //!!
+        DateTime(2023, 4, 2, 12, 0, 0),
+        DateTime(2023, 4, 3, 18, 0, 0),
+        48); //!!
   });
 
   group(
@@ -144,23 +144,23 @@ void main() {
         counter++,
         CalculatorController.calculateParkingFee as Function(void p1),
         true,
-        DateTime(2023, 4, 1, 12, 0, 0),
-        DateTime(2023, 4, 2, 6, 0, 0),
-        -1); //!!
+        DateTime(2023, 4, 1, 6, 0, 0),
+        DateTime(2023, 4, 2, 12, 0, 0),
+        48);
     _singleTest(
         counter++,
         CalculatorController.calculateParkingFee as Function(void p1),
         true,
         DateTime(2023, 4, 1, 12, 0, 0),
         DateTime(2023, 4, 2, 12, 0, 0),
-        -1); //!!
+        34.8);
     _singleTest(
         counter++,
         CalculatorController.calculateParkingFee as Function(void p1),
         true,
-        DateTime(2023, 4, 1, 12, 0, 0),
-        DateTime(2023, 4, 2, 18, 0, 0),
-        -1); //!!
+        DateTime(2023, 4, 1, 18, 0, 0),
+        DateTime(2023, 4, 2, 12, 0, 0),
+        21.6);
   });
 
   group(
@@ -176,7 +176,11 @@ void main() {
       DateTime(2022, 4, 4, 12, 0, 0),
       DateTime(2022, 4, 4, 18, 0, 0)
     ];
-    expectedAns = [[]]; //!!
+    expectedAns = [
+      [40.8, 27.6, 14.4],
+      [54, 40.8, 27.6],
+      [67.2, 54, 40.8]
+    ];
 
     _matrixTest(CalculatorController.calculateParkingFee() as Function(void p1),
         true, xHeader, yHeader, expectedAns);
@@ -195,7 +199,13 @@ void main() {
       DateTime(2022, 4, 5, 12, 0, 0),
       DateTime(2022, 4, 5, 18, 0, 0)
     ];
-    expectedAns = [[]]; //!!
+    List<List<double>> expectedAnsSet6 = [[]];
+    double fullNonSunday = 40.8;
+    for (int i = 0; i < expectedAns.length; i++) {
+      for (int j = 0; j < expectedAns[0].length; j++) {
+        expectedAnsSet6[i][j] = expectedAns[i][j] + fullNonSunday;
+      }
+    }
 
     _matrixTest(CalculatorController.calculateParkingFee() as Function(void p1),
         true, xHeader, yHeader, expectedAns);
@@ -214,7 +224,13 @@ void main() {
       DateTime(2022, 4, 3, 12, 0, 0),
       DateTime(2022, 4, 3, 18, 0, 0)
     ];
-    expectedAns = [[]]; //!!
+    List<List<double>> expectedAnsSet7 = [[]];
+    double fullSunday = 28.8;
+    for (int i = 0; i < expectedAns.length; i++) {
+      for (int j = 0; j < expectedAns[0].length; j++) {
+        expectedAnsSet7[i][j] = expectedAns[i][j] + fullSunday;
+      }
+    }
 
     _matrixTest(CalculatorController.calculateParkingFee() as Function(void p1),
         true, xHeader, yHeader, expectedAns);
@@ -256,7 +272,16 @@ void main() {
   group("Set 2: Central area & Same day parking & Non-Sunday", () {
     xHeader = _generateMatrixHeaders(DateTime(2023, 4, 3), "x");
     yHeader = _generateMatrixHeaders(DateTime(2023, 4, 3), "y");
-    expectedAns = [[]]; //!!
+    expectedAns = [
+      [7.2, 6, 0, -1, -1, -1, -1, -1],
+      [8.4, 7.2, 1.2, 0, -1, -1, -1, -1],
+      [10.8, 9.6, 3.6, 2.4, 0, -1, -1, -1],
+      [30, 28.8, 22.8, 21.6, 19.2, 0, -1, -1],
+      [32.4, 31.2, 25.2, 24, 21.6, 2.4, 0, -1],
+      [33.6, 32.4, 26.4, 25.2, 22.8, 3.6, 1.2, 0],
+      [39.6, 38.4, 32.4, 31.2, 28.8, 9.6, 7.2, 6],
+      [40.8, 39.6, 33.6, 32.4, 30, 10.8, 8.4, 7.2]
+    ];
 
     _matrixTest(CalculatorController.calculateParkingFee() as Function(void p1),
         true, xHeader, yHeader, expectedAns);
@@ -265,28 +290,9 @@ void main() {
   group(
       "Set 3: Central area & Start date and end date differs by one day & Start day is a Sunday",
       () {
-    xHeader = _generateMatrixHeaders(DateTime(2023, 4, 2), "x");
-    DateTime endDate = DateTime(2023, 4, 3, 3, 0, 0);
-    List<double> expected1DAns = []; //!!
-
-    counter = 1;
-    for (int i = 0; i < xHeader.length; i++) {
-      _singleTest(
-          counter++,
-          CalculatorController.calculateParkingFee() as Function(void p1),
-          true,
-          xHeader[i],
-          endDate,
-          expected1DAns[i]);
-    }
-  });
-
-  group(
-      "Set 4: Central area & Start date and end date differs by one day & End day is a Sunday",
-      () {
-    DateTime startDate = DateTime(2023, 4, 3, 3, 0, 0);
-    List<DateTime> yHeader = _generateMatrixHeaders(DateTime(2023, 4, 2), "y");
-    List<double> expected1DAns = []; //!!
+    DateTime startDate = DateTime(2023, 4, 2, 12, 0, 0);
+    List<DateTime> yHeader = _generateMatrixHeaders(DateTime(2023, 4, 3), "y");
+    List<double> expected1DAns = [14.4, 15.6, 21.6, 22.8, 25.2, 44.4, 46.8, 48];
 
     counter = 1;
     for (int i = 0; i < xHeader.length; i++) {
@@ -301,11 +307,36 @@ void main() {
   });
 
   group(
+      "Set 4: Central area & Start date and end date differs by one day & End day is a Sunday",
+      () {
+    xHeader = _generateMatrixHeaders(DateTime(2023, 4, 1), "x");
+    DateTime endDate = DateTime(2023, 4, 2, 12, 0, 0);
+    List<double> expected1DAns = [48, 46.8, 44.4, 25.2, 22.8, 21.6, 15.6, 14.4];
+
+    counter = 1;
+    for (int i = 0; i < xHeader.length; i++) {
+      _singleTest(
+          counter++,
+          CalculatorController.calculateParkingFee() as Function(void p1),
+          true,
+          xHeader[i],
+          endDate,
+          expected1DAns[i]);
+    }
+  });
+
+  group(
       "Set 5: Central area & Start date and end date differs by one day & None of the days are Sundays",
       () {
     xHeader = _generateMatrixHeaders(DateTime(2023, 4, 3), "x");
     yHeader = _generateMatrixHeaders(DateTime(2023, 4, 4), "y");
-    expectedAns = [[]]; //!!
+    List<List<double>> expectedAnsSet5 = [[]];
+    double fullNonSunday = 40.8;
+    for (int i = 0; i < expectedAns.length; i++) {
+      for (int j = 0; j < expectedAns[0].length; j++) {
+        expectedAnsSet5[i][j] = expectedAns[i][j] + fullNonSunday;
+      }
+    }
 
     _matrixTest(CalculatorController.calculateParkingFee() as Function(void p1),
         true, xHeader, yHeader, expectedAns);
@@ -316,7 +347,13 @@ void main() {
       () {
     xHeader = _generateMatrixHeaders(DateTime(2023, 4, 3), "x");
     yHeader = _generateMatrixHeaders(DateTime(2023, 4, 5), "y");
-    expectedAns = [[]]; //!!
+    List<List<double>> expectedAnsSet6 = [[]];
+    double fullNonSunday = 40.8;
+    for (int i = 0; i < expectedAns.length; i++) {
+      for (int j = 0; j < expectedAns[0].length; j++) {
+        expectedAnsSet6[i][j] = expectedAns[i][j] + 2 * fullNonSunday;
+      }
+    }
 
     _matrixTest(CalculatorController.calculateParkingFee() as Function(void p1),
         true, xHeader, yHeader, expectedAns);
@@ -327,7 +364,13 @@ void main() {
       () {
     xHeader = _generateMatrixHeaders(DateTime(2023, 4, 1), "x");
     yHeader = _generateMatrixHeaders(DateTime(2023, 4, 3), "y");
-    expectedAns = [[]]; //!!
+    List<List<double>> expectedAnsSet6 = [[]];
+    double fullSunday = 28.8;
+    for (int i = 0; i < expectedAns.length; i++) {
+      for (int j = 0; j < expectedAns[0].length; j++) {
+        expectedAnsSet6[i][j] = expectedAns[i][j] + 2 * fullSunday;
+      }
+    }
 
     _matrixTest(CalculatorController.calculateParkingFee() as Function(void p1),
         true, xHeader, yHeader, expectedAns);
@@ -363,16 +406,23 @@ void main() {
     _singleTest(
         counter++,
         CalculatorController.calculateParkingFee as Function(void p1),
-        true,
+        false,
         DateTime(2023, 4, 3, 23, 0, 0),
         DateTime(2023, 4, 5, 2, 0, 0),
         44.4);
     _singleTest(
         counter++,
         CalculatorController.calculateParkingFee as Function(void p1),
-        false,
+        true,
+        DateTime(2023, 4, 1, 23, 0, 0),
+        DateTime(2023, 4, 3, 2, 0, 0),
+        32.4);
+    _singleTest(
+        counter++,
+        CalculatorController.calculateParkingFee as Function(void p1),
+        true,
         DateTime(2023, 4, 3, 23, 0, 0),
-        DateTime(2023, 4, 4, 2, 0, 0),
+        DateTime(2023, 4, 5, 2, 0, 0),
         32.4);
   });
 
