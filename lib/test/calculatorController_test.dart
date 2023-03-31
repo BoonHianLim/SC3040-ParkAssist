@@ -329,47 +329,6 @@ void main() {
   });
 }
 
-void testThis(Function(void) targetMethod, bool testIsMatrix, bool isCentral,
-    List<DateTime> args, List<double> expectedAns) {
-  // Augment list before passing into testThis()
-  // If testing method is SingleTest, then args will contain exactly 2 elements in the list
-  // whereas expectedAns will contain exactly 1 element
-  // If testing method is MatrixTest, then args will contain, in equal numbers, xHeader elements and yHeader elements
-  // will split args exactly into half, first half for xHeader and second half for yHeader
-  // whereas expectedAns will contain exactly half the size of args
-
-  if (testIsMatrix) {
-    // check if args format is correct or not
-
-    List<DateTime> xHeader = [];
-    List.copyRange(xHeader, 0, args, 0, (args.length / 2).floor());
-    List<DateTime> yHeader = [];
-    List.copyRange(
-        yHeader, 0, args, (args.length / 2).floor() + 1, args.length);
-
-    List<List<double>> formattedAns = [[]];
-    List<double> row = [];
-    int counter = 0;
-    for (int i = 0; i < xHeader.length; i++) {
-      row = [];
-      for (int j = 0; j < yHeader.length; j++) {
-        row.add(expectedAns[counter++]);
-      }
-      formattedAns[i] = row;
-    }
-
-    _matrixTest(targetMethod, isCentral, xHeader, yHeader, formattedAns);
-  } else {
-    // check if args format is correct or not
-
-    DateTime start = args[0];
-    DateTime end = args[1];
-    double formattedAns = expectedAns[0];
-
-    _singleTest(1, targetMethod, isCentral, start, end, formattedAns);
-  }
-}
-
 void _matrixTest(Function targetMethod, bool isCentral, List<DateTime> xHeader,
     List<DateTime> yHeader, List<List<double>> expectedAns) {
   if (isCentral) {
