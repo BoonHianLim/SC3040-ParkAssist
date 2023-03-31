@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:parkassist/entity/carpark.dart';
-import 'dart:developer';
 
 ///Controller class to manage parking fare calculator
 class CalculatorController {
