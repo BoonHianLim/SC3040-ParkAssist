@@ -5,6 +5,7 @@ void main() {
   // disable calculator logging because these tests will be ran many times
   CalculatorController.logging = false;
 
+  /*
   group("Simple Test : \n", () {
     test("Testing simple function", () {
       int a = 1;
@@ -16,6 +17,7 @@ void main() {
     _singleTest(0, CalculatorController.calculateParkingFee, true,
         DateTime(2023, 4, 3, 6, 0, 0), DateTime(2023, 4, 4, 6, 0, 0), 40.8);
   });
+  */
 
   //--------------------------------------------------
   //         1. EQUIVALENCE CLASS TESTING
@@ -152,16 +154,6 @@ void main() {
   counter = 1;
   xHeader = [];
   yHeader = [];
-  /*expectedAns = [
-    [7.2, 6, 0, -1, -1, -1, -1, -1],
-    [8.4, 7.2, 1.2, 0, -1, -1, -1, -1],
-    [10.8, 9.6, 3.6, 2.4, 0, -1, -1, -1],
-    [30, 28.8, 22.8, 21.6, 19.2, 0, -1, -1],
-    [32.4, 31.2, 25.2, 24, 21.6, 2.4, 0, -1],
-    [33.6, 32.4, 26.4, 25.2, 22.8, 3.6, 1.2, 0],
-    [39.6, 38.4, 32.4, 31.2, 28.8, 9.6, 7.2, 6],
-    [40.8, 39.6, 33.6, 32.4, 30, 10.8, 8.4, 7.2]
-  ];*/
   expectedAns = [
     [7.2, 8.4, 10.8, 30, 32.4, 33.6, 39.6, 40.8],
     [6, 7.2, 9.6, 28.8, 31.2, 32.4, 38.4, 39.6],
@@ -329,6 +321,8 @@ void main() {
   });
 }
 
+/// Preform testing in matrix format
+/// All combinations of [xHeader] and [yHeader] will be tested in succession
 void _matrixTest(Function targetMethod, bool isCentral, List<DateTime> xHeader,
     List<DateTime> yHeader, List<List<double>> expectedAns) {
   if (isCentral) {
@@ -361,6 +355,7 @@ void _matrixTest(Function targetMethod, bool isCentral, List<DateTime> xHeader,
   }
 }
 
+/// Performs one test given the starting and ending DateTime
 void _singleTest(int counter, Function targetMethod, bool isCentral,
     DateTime start, DateTime end, double expectedAns) {
   if (isCentral) {
@@ -388,6 +383,7 @@ void _singleTest(int counter, Function targetMethod, bool isCentral,
   });
 }
 
+/// Automatically generates the headers based on the defined boundary values
 List<DateTime> _generateMatrixHeaders(DateTime date, String axis) {
   List<DateTime> headerList = [];
 

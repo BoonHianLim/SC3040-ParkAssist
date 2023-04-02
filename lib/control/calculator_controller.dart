@@ -195,7 +195,7 @@ class CalculatorController {
   ///
   ///Then calculate the cost of each of these intervals using calculateCostSingleDay then add them together to get final price
   static double calculateParkingFee() {
-    if (logging) print('ran calculateParkingFee');
+    //if (logging) print('ran calculateParkingFee');
     DateTime start = startDateTime;
     DateTime end = endDateTime;
     double price = 0;
@@ -208,14 +208,14 @@ class CalculatorController {
       DateTime s = temp[i];
       DateTime e = temp[i + 1];
       price += calculateCostSingleDay(s, e);
-      if (logging) print('$s $e $price');
+      //if (logging) print('$s $e $price');
     }
     return price;
   }
 
   ///Split days at the 0000 mark and return is as a list of DateTime objects
   static List<DateTime> splitDays(DateTime start, DateTime end) {
-    if (logging) print('ran splitDays');
+    //if (logging) print('ran splitDays');
     List<DateTime> list = [];
     list.add(start);
     int counter = 0;
@@ -233,7 +233,7 @@ class CalculatorController {
       list.add(DateTime(temp.year, temp.month, temp.day + 1, 0, 0));
     }
     list.add(end);
-    if (logging) print(list);
+    //if (logging) print(list);
     return list;
   }
 
@@ -247,7 +247,7 @@ class CalculatorController {
   ///
   ///Lastly, if all above conditions are false, split into 6 cases and calculate based on each case
   static double calculateCostSingleDay(DateTime start, DateTime end) {
-    if (logging) print('ran calculateCostSingleDay');
+    //if (logging) print('ran calculateCostSingleDay');
     int peakDuration = 0;
     int nonPeakDuration = 0;
     double peakCost = 0;
@@ -271,7 +271,7 @@ class CalculatorController {
           if (start.isBefore(startOfPeak.add(const Duration(seconds: 1))) &&
               end.isBefore(endOfPeak.add(const Duration(seconds: 1))) &&
               end.isAfter(startOfPeak.subtract(const Duration(seconds: 1)))) {
-            if (logging) print('case1');
+            //if (logging) print('case1');
             nonPeakDuration += startOfPeak.difference(start).inMinutes;
             peakDuration += end.difference(startOfPeak).inMinutes;
           }
@@ -281,7 +281,7 @@ class CalculatorController {
               start.isBefore(endOfPeak.add(const Duration(seconds: 1))) &&
               end.isAfter(startOfPeak.subtract(const Duration(seconds: 1))) &&
               end.isBefore(endOfPeak.add(const Duration(seconds: 1)))) {
-            if (logging) print('case2');
+            //if (logging) print('case2');
             peakDuration += end.difference(start).inMinutes;
           }
           //start 0700-1700 end 1700-2359
@@ -289,7 +289,7 @@ class CalculatorController {
                   .isAfter(startOfPeak.subtract(const Duration(seconds: 1))) &&
               start.isBefore(endOfPeak.add(const Duration(seconds: 1))) &&
               end.isAfter(endOfPeak.subtract(const Duration(seconds: 1)))) {
-            if (logging) print('case3');
+            //if (logging) print('case3');
             peakDuration += endOfPeak.difference(start).inMinutes;
             nonPeakDuration += end.difference(endOfPeak).inMinutes;
           }
@@ -297,14 +297,14 @@ class CalculatorController {
           else if (start
                   .isBefore(startOfPeak.add(const Duration(seconds: 1))) &&
               end.isBefore(startOfPeak.add(const Duration(seconds: 1)))) {
-            if (logging) print('case4');
+            //if (logging) print('case4');
             nonPeakDuration += end.difference(start).inMinutes;
           }
           //start 0000-0700 end 1700-2359
           else if (start
                   .isBefore(startOfPeak.add(const Duration(seconds: 1))) &&
               end.isAfter(endOfPeak.subtract(const Duration(seconds: 1)))) {
-            if (logging) print('case5');
+            //if (logging) print('case5');
             peakDuration += endOfPeak.difference(startOfPeak).inMinutes;
             nonPeakDuration += startOfPeak.difference(start).inMinutes +
                 end.difference(endOfPeak).inMinutes;
@@ -313,10 +313,10 @@ class CalculatorController {
           else if (start
                   .isAfter(endOfPeak.subtract(const Duration(seconds: 1))) &&
               end.isAfter(endOfPeak.subtract(const Duration(seconds: 1)))) {
-            if (logging) print('case6');
+            //if (logging) print('case6');
             nonPeakDuration += end.difference(start).inMinutes;
           } else {
-            if (logging) print('wtf');
+            //if (logging) print('wtf');
           }
         }
       }
@@ -335,7 +335,7 @@ class CalculatorController {
     }
     //non central carpark
     else {
-      if (logging) print("non central carpark");
+      //if (logging) print("non central carpark");
       nonPeakDuration = end.difference(start).inMinutes;
     }
     peakCost = peakDuration ~/ 30 * 1.2;
