@@ -26,7 +26,7 @@ class CarParkController {
   ///Update carpark list by calling API
   static Future<void> updateCarparkList() async {
     carparkList = await getAllCarparks();
-    print("carpark list updated");
+    //print("carpark list updated");
   }
 
   ///Gets a carpark from current list using id

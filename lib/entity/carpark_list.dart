@@ -18,7 +18,7 @@ class CarParkList {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['odata.metadata'] = odataMetadata;
     if (carparks != null) {
       data['value'] = carparks!.map((v) => v.toJson()).toList();
