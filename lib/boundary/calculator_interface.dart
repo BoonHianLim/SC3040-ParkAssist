@@ -20,6 +20,7 @@ class _CalculatorInterfaceState extends State<CalculatorInterface> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      backgroundColor: const Color.fromARGB(255, 200, 244, 88),
       appBar: AppBar(
         centerTitle: true,
         title: FittedBox(

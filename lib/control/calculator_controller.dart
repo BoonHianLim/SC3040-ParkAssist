@@ -159,6 +159,7 @@ class CalculatorController {
       if (tempPrice > 0) {
         price = '\$ ${tempPrice.toStringAsFixed(2)}';
       } else {
+        //TODO implement?
         price = 'First 15 minutes is free';
       }
     }
@@ -186,6 +187,13 @@ class CalculatorController {
     return sunday;
   }
 
+  ///Return parking fee
+  ///
+  ///First split days at the 0000 mark using splitDays function
+  ///
+  ///Example 04Mar2023 1400 to 05Mar2023 1800 will be split into 04Mar2023 1400 to 05Mar2023 0000 and 05Mar2023 000 to 05Mar2023
+  ///
+  ///Then calculate the cost of each of these intervals using calculateCostSingleDay then add them together to get final price
   static double calculateParkingFee() {
     if (logging) print('ran calculateParkingFee');
     DateTime start = startDateTime;
@@ -199,21 +207,52 @@ class CalculatorController {
     for (int i = 0; i < temp.length; i += 2) {
       DateTime s = temp[i];
       DateTime e = temp[i + 1];
-      price += calculateCostSingleDate(s, e);
+      price += calculateCostSingleDay(s, e);
       if (logging) print('$s $e $price');
     }
     return price;
   }
 
-  static double calculateCostSingleDate(DateTime start, DateTime end) {
+  ///Split days at the 0000 mark and return is as a list of DateTime objects
+  static List<DateTime> splitDays(DateTime start, DateTime end) {
+    if (logging) print('ran splitDays');
+    List<DateTime> list = [];
+    list.add(start);
+    int counter = 0;
+    DateTime temp = start;
+    while (end.difference(temp).inDays != 0) {
+      list.add(DateTime(temp.year, temp.month, temp.day + 1, 0, 0));
+      list.add(DateTime(temp.year, temp.month, temp.day + 1, 0, 0));
+      temp = temp.add(const Duration(days: 1));
+      counter++;
+      if (counter > 10) break;
+    }
+    //if within 24hrs but not on same date
+    if (end.day != temp.day) {
+      list.add(DateTime(temp.year, temp.month, temp.day + 1, 0, 0));
+      list.add(DateTime(temp.year, temp.month, temp.day + 1, 0, 0));
+    }
+    list.add(end);
+    if (logging) print(list);
+    return list;
+  }
+
+  ///Calculate the cost of parking between the given intervals start and end
+  ///
+  ///First check if carpark is in central area, if not calculation is simple, just multiply duration by $0.6/half hour
+  ///
+  ///If carpark is in central area, check if given time period is a 24hrs period eg from 4Mar2023 0000 to 5Mar2023 0000
+  ///
+  ///Next check if given day is a sunday
+  ///
+  ///Lastly, if all above conditions are false, split into 6 cases and calculate based on each case
+  static double calculateCostSingleDay(DateTime start, DateTime end) {
     if (logging) print('ran calculateCostSingleDay');
     int peakDuration = 0;
     int nonPeakDuration = 0;
     double peakCost = 0;
     double nonPeakCost = 0;
     if (hdbCentralAreaList.contains(getCarparkInfo().carParkID)) {
-      //central carpark
-      //same date
       if (end.difference(start).inDays == 0) {
         //sunday
         if (start.weekday == DateTime.sunday) {
@@ -308,29 +347,6 @@ class CalculatorController {
       nonPeakCost += 0.6;
     }
     return peakCost + nonPeakCost;
-  }
-
-  static List<DateTime> splitDays(DateTime start, DateTime end) {
-    if (logging) print('ran splitDays');
-    List<DateTime> list = [];
-    list.add(start);
-    int counter = 0;
-    DateTime temp = start;
-    while (end.difference(temp).inDays != 0) {
-      list.add(DateTime(temp.year, temp.month, temp.day + 1, 0, 0));
-      list.add(DateTime(temp.year, temp.month, temp.day + 1, 0, 0));
-      temp = temp.add(const Duration(days: 1));
-      counter++;
-      if (counter > 10) break;
-    }
-    //if within 24hrs but not on same date
-    if (end.day != temp.day) {
-      list.add(DateTime(temp.year, temp.month, temp.day + 1, 0, 0));
-      list.add(DateTime(temp.year, temp.month, temp.day + 1, 0, 0));
-    }
-    list.add(end);
-    if (logging) print(list);
-    return list;
   }
 
   // ///Calculate parking fare of a carpark not in central area
@@ -464,12 +480,13 @@ class CalculatorController {
   // }
 }
 
-void main(List<String> args) {
-  CalculatorController.carpark.carParkID = "BBB";
-  CalculatorController.setStartDateTime(DateTime(2023, 4, 2, 12, 0, 0));
-  CalculatorController.setEndDateTime(
-    DateTime(2023, 4, 2, 12, 0, 0),
-  );
-  print(CalculatorController.calculateParkingFee());
-  return;
-}
+//for testing
+// void main(List<String> args) {
+//   CalculatorController.carpark.carParkID = "BBB";
+//   CalculatorController.setStartDateTime(DateTime(2023, 4, 2, 12, 0, 0));
+//   CalculatorController.setEndDateTime(
+//     DateTime(2023, 4, 2, 12, 0, 0),
+//   );
+//   print(CalculatorController.calculateParkingFee());
+//   return;
+// }
