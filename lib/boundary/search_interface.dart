@@ -47,7 +47,7 @@ class _SearchInterfaceState extends State<SearchInterface> {
                         zoom: 18,
                         tilt: 0,
                         bearing: 0));
-                    print("Back to map centred");
+                    //print("Back to map centred");
                     Navigator.pop(context);
                   },
                   child: Container(

@@ -87,7 +87,7 @@ class _MapInterfaceState extends State<MapInterface> {
           title: "$availableLots lots available",
           snippet: "click for more info",
           onTap: () async {
-            print("tapped $id");
+            //print("tapped $id");
             await Navigator.push(
                 context,
                 MaterialPageRoute(

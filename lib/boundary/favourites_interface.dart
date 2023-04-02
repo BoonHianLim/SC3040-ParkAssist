@@ -99,7 +99,7 @@ class _FavouritesInterfaceState extends State<FavouritesInterface> {
                         zoom: 18,
                         tilt: 0,
                         bearing: 0));
-                    print("Back to map centred");
+                    //print("Back to map centred");
                     Navigator.pop(context);
                   },
                 );
