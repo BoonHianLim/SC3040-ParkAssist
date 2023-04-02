@@ -156,12 +156,7 @@ class CalculatorController {
     if (!validTime()) {
       price = 'Set End Date & Time to be after Start Date & Time';
     } else {
-      if (tempPrice > 0) {
-        price = '\$ ${tempPrice.toStringAsFixed(2)}';
-      } else {
-        //TODO implement?
-        price = 'First 15 minutes is free';
-      }
+      price = '\$ ${tempPrice.toStringAsFixed(2)}';
     }
   }
 
