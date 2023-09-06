@@ -134,10 +134,10 @@ class _InfoInterfaceState extends State<InfoInterface> {
                   ? (Container(
                       height: 70,
                       color: Colors.grey.shade400,
-                      child: Center(
+                      child: const Center(
                           child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: const [
+                              children: [
                             Text(r'$1.20 per half-hour'),
                             Text(r'(7:00am to 5:00pm, Mondays to Saturdays)'),
                             Text(r'$0.60 per half hour (Other hours)'),
