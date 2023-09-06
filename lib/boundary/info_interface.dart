@@ -134,7 +134,7 @@ class _InfoInterfaceState extends State<InfoInterface> {
                   ? (Container(
                       height: 70,
                       color: Colors.grey.shade400,
-                      child: const Center(
+                      child: Center(
                           child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
