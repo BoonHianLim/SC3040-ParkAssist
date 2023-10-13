@@ -1,5 +1,5 @@
 ///Entity class for car park, contains all relevant information
-class CarPark {
+class CarPark extends Comparable<CarPark> {
   String? carParkID;
   String? area;
   String? development;
@@ -43,4 +43,22 @@ class CarPark {
   String toString() {
     return "id:$carParkID,area:$area,development:$development,location:$location,available lots:$availableLots,lotType:$lotType,agency:$agency";
   }
+
+  @override
+  int compareTo(CarPark other) {
+    //compare the carparkid, if it is the same, return 0
+    if (carParkID == other.carParkID) {
+      return 0;
+    }
+    //compare the carparkid, if it is not the same, return 1
+    else {
+      return 1;
+    }
+  }
+
+  @override
+  bool operator == (Object other) =>
+      other is CarPark &&
+      other.runtimeType == runtimeType &&
+      compareTo(other) == 0;
 }

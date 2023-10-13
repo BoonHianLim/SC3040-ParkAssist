@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:parkassist/boundary/info_interface.dart';
 import 'package:parkassist/boundary/search_interface.dart';
 import 'package:parkassist/control/carpark_controller.dart';
+import 'package:parkassist/control/history_controller.dart';
 import 'package:parkassist/control/map_controller.dart';
 import 'package:parkassist/boundary/favourites_interface.dart';
+import 'package:parkassist/control/my_vehicle_controller.dart';
 import 'package:parkassist/entity/carpark.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 ///Interface to display main page which contains the map
 class MapInterface extends StatefulWidget {
@@ -37,6 +41,9 @@ class _MapInterfaceState extends State<MapInterface> {
     await MapController.updateLocationAccessPermission();
     await MapController.updateCurrentUserLocation();
     await buildMarkers();
+    await MyVehicleController.init(markersList, setState);
+    await HistoryController.fetchHistoryList();
+
     //set camera position to userlocation
     MapController.setCurrentCameraPosition(
         MapController.getCurrentUserLocation());
@@ -184,40 +191,135 @@ class _MapInterfaceState extends State<MapInterface> {
           alignment: AlignmentDirectional.bottomStart,
           children: [
             GoogleMap(
+              onLongPress: (LatLng latLng) {
+                Marker? previousMarker;
+                Marker? backupMarker;
+                print(markersList
+                    .where((element) => element.markerId.value == 'my_vehicle')
+                    .length);
+                try {
+                  previousMarker = markersList.firstWhere(
+                      (marker) => marker.markerId.value == 'my_vehicle');
+                } catch (e) {}
+
+                if ((previousMarker != null)) {
+                  backupMarker = MyVehicleController.myVehicleMarker(
+                      previousMarker.position, markersList, setState);
+                  setState(() {
+                    markersList.remove(previousMarker);
+                  });
+                }
+
+                setState(() {
+                  markersList.add(MyVehicleController.myVehicleMarker(latLng, markersList, setState));
+                });
+                mapController!.animateCamera(CameraUpdate.newCameraPosition(
+                    MyVehicleController.getTempCurrentVehicleLocation(latLng)));
+
+                showDialog<String>(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    content: const Text(
+                        'Are you sure you want to set your vehicle to a new location?'),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () {
+                          setState(() {
+                            previousMarker = markersList.firstWhere((marker) =>
+                                marker.markerId.value == 'my_vehicle');
+                            markersList.remove(previousMarker);
+                            if (backupMarker != null) {
+                              markersList.add(backupMarker);
+                            }
+                          });
+                          Navigator.pop(context, 'Cancel');
+                          return;
+                        },
+                        child: const Text('Cancel'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context, 'OK');
+                          MyVehicleController.setLatLng(latLng);
+                          setState(() {});
+                        },
+                        child: const Text('OK'),
+                      ),
+                    ],
+                  ),
+                );
+              },
               onCameraMove: (position) {
                 MapController.setCurrentCameraPosition(position);
               },
               onMapCreated: onMapCreated,
               initialCameraPosition: MapController.getCurrentCameraPosition(),
               myLocationEnabled:
-                  false, //set to isLocationAccessGranted, is set to false for now cos its flooding debug console
+                  true, //set to isLocationAccessGranted, is set to false for now cos its flooding debug console
               myLocationButtonEnabled: false,
               markers: markersList,
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
-              child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      shape: const CircleBorder(),
-                      backgroundColor: Colors.black),
-                  onPressed: () async {
-                    if (MapController.getLocationAccessGranted()) {
-                      await MapController.updateCurrentUserLocation();
-                      mapController!.animateCamera(
-                          CameraUpdate.newCameraPosition(
-                              MapController.getCurrentUserLocation()));
-                    } else {
-                      await MapController.requestLocationAccess().then((value) {
-                        MapController.updateLocationAccessPermission();
-                      });
-                    }
-                  },
-                  child: const Icon(
-                    Icons.flag_circle_rounded,
-                    color: Color(0xFF00E640),
-                    size: 80,
-                  )),
-            )
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    if (MyVehicleController.isExist())
+                      ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              shape: const CircleBorder(
+                                side: BorderSide(
+                                  color: Colors.black,
+                                  width: 7.0,
+                                ),
+                              ),
+                              backgroundColor: Color(0xFF00E640)),
+                          onPressed: () async {
+                            if (MapController.getLocationAccessGranted()) {
+                              await MapController.updateCurrentUserLocation();
+                              mapController!.animateCamera(
+                                  CameraUpdate.newCameraPosition(
+                                      MyVehicleController
+                                          .getCurrentVehicleLocation()));
+                            } else {
+                              await MapController.requestLocationAccess()
+                                  .then((value) {
+                                MapController.updateLocationAccessPermission();
+                              });
+                            }
+                          },
+                          child: const Icon(
+                            Icons.directions_car_rounded,
+                            color: Colors.black,
+                            size: 80,
+                          )),
+                    const SizedBox(
+                      height: 10.0,
+                    ),
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            shape: const CircleBorder(),
+                            backgroundColor: Colors.black),
+                        onPressed: () async {
+                          if (MapController.getLocationAccessGranted()) {
+                            await MapController.updateCurrentUserLocation();
+                            mapController!.animateCamera(
+                                CameraUpdate.newCameraPosition(
+                                    MapController.getCurrentUserLocation()));
+                          } else {
+                            await MapController.requestLocationAccess()
+                                .then((value) {
+                              MapController.updateLocationAccessPermission();
+                            });
+                          }
+                        },
+                        child: const Icon(
+                          Icons.flag_circle_rounded,
+                          color: Color(0xFF00E640),
+                          size: 80,
+                        )),
+                  ],
+                ))
           ],
         ),
       );

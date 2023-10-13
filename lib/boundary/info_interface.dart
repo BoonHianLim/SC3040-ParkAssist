@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:parkassist/control/calculator_controller.dart';
 import 'package:parkassist/control/carpark_controller.dart';
 import 'package:parkassist/control/favourites_controller.dart';
+import 'package:parkassist/control/history_controller.dart';
 import 'package:parkassist/entity/carpark.dart';
 import 'package:parkassist/entity/favourites_entity.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 ///Interface to display information on the selected car park
 class InfoInterface extends StatefulWidget {
@@ -160,6 +162,21 @@ class _InfoInterfaceState extends State<InfoInterface> {
                             builder: (context) => const CalculatorInterface()));
                   },
                   child: const Text('Parking Fee Calculator')),
+            ),
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(8),
+              child: ElevatedButton(
+                  onPressed: () {
+                    if (carpark.location != null) {
+                      HistoryController.addHistory(carpark: carpark);
+                      List<String> latlng = carpark.location!.split(' ');
+                      String googleUrl =
+                          'https://www.google.com/maps/dir/?api=1&destination=${latlng[0]},${latlng[1]}&travelmode=driving';
+                      launchUrl(Uri.parse(googleUrl));
+                    }
+                  },
+                  child: const Text('Navigate to Carpark')),
             ),
           ],
         ),
