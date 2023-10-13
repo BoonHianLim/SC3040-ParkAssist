@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:parkassist/control/calculator_controller.dart';
 import 'package:parkassist/control/carpark_controller.dart';
 import 'package:parkassist/control/favourites_controller.dart';
+import 'package:parkassist/control/history_controller.dart';
 import 'package:parkassist/entity/carpark.dart';
 import 'package:parkassist/entity/favourites_entity.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -168,8 +169,10 @@ class _InfoInterfaceState extends State<InfoInterface> {
               child: ElevatedButton(
                   onPressed: () {
                     if (carpark.location != null) {
+                      HistoryController.addHistory(carpark: carpark);
                       List<String> latlng = carpark.location!.split(' ');
-                      String googleUrl = 'https://www.google.com/maps/dir/?api=1&destination=${latlng[0]},${latlng[1]}&travelmode=driving';
+                      String googleUrl =
+                          'https://www.google.com/maps/dir/?api=1&destination=${latlng[0]},${latlng[1]}&travelmode=driving';
                       launchUrl(Uri.parse(googleUrl));
                     }
                   },

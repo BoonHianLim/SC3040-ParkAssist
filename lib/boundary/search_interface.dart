@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:parkassist/control/history_controller.dart';
 import 'package:parkassist/control/map_controller.dart';
 import 'package:parkassist/entity/carpark.dart';
 import 'package:parkassist/control/carpark_controller.dart';
+import 'package:parkassist/entity/history_entity.dart';
 
 ///Interface to display the search page
 class SearchInterface extends StatefulWidget {
@@ -35,11 +37,12 @@ class _SearchInterfaceState extends State<SearchInterface> {
           ],
         ),
         body: ListView.builder(
-            itemCount: carparkList.length,
+            itemCount: historyEntity.historyList.length,
             itemBuilder: (BuildContext context, int index) {
               return GestureDetector(
                   onTap: () {
-                    String location = carparkList[index].location!;
+                    String location =
+                        historyEntity.historyList.elementAt(index).location!;
                     double lat = double.parse(location.split(" ")[0]);
                     double lng = double.parse(location.split(" ")[1]);
                     MapController.setCurrentCameraPosition(CameraPosition(
@@ -54,7 +57,9 @@ class _SearchInterfaceState extends State<SearchInterface> {
                     height: 75,
                     color: Colors.white,
                     child: Center(
-                      child: Text(carparkList[index].development!),
+                      child: Text(historyEntity.historyList
+                          .elementAt(index)
+                          .development!),
                     ),
                   ));
             }));
