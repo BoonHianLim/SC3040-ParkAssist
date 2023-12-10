@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:parkassist/boundary/map_interface.dart';
+import 'package:parkassist/control/history_controller.dart';
 
 void main() {
   runApp(const MyApp());
