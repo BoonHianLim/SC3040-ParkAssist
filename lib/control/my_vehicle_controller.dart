@@ -21,12 +21,17 @@ class MyVehicleController {
     return _isExist;
   }
 
-  static Future<void> init(Set<Marker> markersList, Function(Function()) setState) async {
+  static Future<void> init(
+      Set<Marker> markersList, Function(Function()) setState) async {
     Uint8List data = await _getBytesFromAsset('assets/marker2.png', 250);
     myVehicleIcon = BitmapDescriptor.fromBytes(data);
     prefs = await SharedPreferences.getInstance();
-    await _fetchMyVehicleLocation();
     _isInit = true;
+    createMarker(markersList, setState);
+  }
+
+  static Future<void> createMarker(Set<Marker> markersList, Function(Function()) setState) async{
+    await _fetchMyVehicleLocation();
     if (isExist()) {
       markersList.add(myVehicleMarker(latlng, markersList, setState));
     }

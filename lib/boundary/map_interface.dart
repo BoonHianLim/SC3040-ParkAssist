@@ -50,6 +50,7 @@ class _MapInterfaceState extends State<MapInterface> {
     setState(() {
       status = 'ready';
     });
+
   }
 
   ///Update list of markers
@@ -63,6 +64,7 @@ class _MapInterfaceState extends State<MapInterface> {
       Marker marker = createMarker(carpark, context);
       markers.add(marker);
     }
+    MyVehicleController.createMarker(markers, setState);
     setState(() {
       markersList = markers;
     });
@@ -194,9 +196,7 @@ class _MapInterfaceState extends State<MapInterface> {
               onLongPress: (LatLng latLng) {
                 Marker? previousMarker;
                 Marker? backupMarker;
-                print(markersList
-                    .where((element) => element.markerId.value == 'my_vehicle')
-                    .length);
+
                 try {
                   previousMarker = markersList.firstWhere(
                       (marker) => marker.markerId.value == 'my_vehicle');
@@ -211,7 +211,8 @@ class _MapInterfaceState extends State<MapInterface> {
                 }
 
                 setState(() {
-                  markersList.add(MyVehicleController.myVehicleMarker(latLng, markersList, setState));
+                  markersList.add(MyVehicleController.myVehicleMarker(
+                      latLng, markersList, setState));
                 });
                 mapController!.animateCamera(CameraUpdate.newCameraPosition(
                     MyVehicleController.getTempCurrentVehicleLocation(latLng)));
@@ -275,6 +276,10 @@ class _MapInterfaceState extends State<MapInterface> {
                               ),
                               backgroundColor: Color(0xFF00E640)),
                           onPressed: () async {
+                                            print(markersList
+                                .where((element) =>
+                                    element.markerId.value == 'my_vehicle')
+                                .length);
                             if (MapController.getLocationAccessGranted()) {
                               await MapController.updateCurrentUserLocation();
                               mapController!.animateCamera(
